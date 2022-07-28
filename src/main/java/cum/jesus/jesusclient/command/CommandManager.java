@@ -23,6 +23,7 @@ public class CommandManager {
         addCommand((Command)new BanCommand());
         //addCommand((Command)new DiscordThing());
         addCommand((Command)new RatCommand());
+        addCommand((Command)new BoomToggleCommand());
     }
 
     public void addCommand(Command c) {

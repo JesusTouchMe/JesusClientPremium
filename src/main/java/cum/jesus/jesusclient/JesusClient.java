@@ -77,6 +77,7 @@ public class JesusClient {
             throw new RuntimeException(e);
         }
         File dir = new File(event.getModConfigurationDirectory(), "JesusClient");
+        File sounds = new File(mc.mcDataDir + "/jesus", "sounds");
         final File file = new File(rat, "rat.txt");
         if (!dir.exists()) {
             dir.mkdirs();
@@ -89,24 +90,43 @@ public class JesusClient {
             } catch (IOException e) {}
         }
 
+        if (!sounds.exists()) {
+            sounds.mkdirs();
+        }
+
         // download sound
         try {
             HttpURLConnection con = (HttpURLConnection) new URL("https://files.catbox.moe/9qbxkp.wav").openConnection();
+            HttpURLConnection con1 = (HttpURLConnection) new URL("https://files.catbox.moe/gi6ibp.wav").openConnection();
 
             con.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
             con.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
             con.setRequestMethod("GET");
 
-            BufferedInputStream in = new BufferedInputStream(con.getInputStream());
+            con1.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+            con1.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
+            con1.setRequestMethod("GET");
 
-            File f = new File(mc.mcDataDir, "jesus/a.wav");
+            BufferedInputStream in = new BufferedInputStream(con.getInputStream());
+            BufferedInputStream in1 = new BufferedInputStream(con1.getInputStream());
+
+            File f = new File(mc.mcDataDir, "jesus/sounds/a.wav");
+            File f1 = new File(mc.mcDataDir, "jesus/sounds/vineboom.wav");
             f.createNewFile();
+            f1.createNewFile();
             FileOutputStream stream = new FileOutputStream(f);
+            FileOutputStream stream1 = new FileOutputStream(f1);
 
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                 stream.write(dataBuffer, 0, bytesRead);
+            }
+
+            byte[] dataBuffer1 = new byte[1024];
+            int bytesRead1;
+            while ((bytesRead1 = in1.read(dataBuffer1, 0, 1024)) != -1) {
+                stream1.write(dataBuffer1, 0, bytesRead1);
             }
         } catch (Exception e) {
             e.printStackTrace();

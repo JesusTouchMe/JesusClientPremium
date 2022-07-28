@@ -161,6 +161,15 @@ public class Config extends Vigilant {
     @Property(type = PropertyType.NUMBER, name = "rat command time", hidden = true, min = 0, max = 100000, category = "Other")
     public int ratWait = 5000;
 
+    @Property(type = PropertyType.NUMBER, name = "a volume", description = "amount of db to increase/decrease by", category = "Other", max = 5, min = -50, hidden = true)
+    public int aVolume = -40;
+
+    @Property(type = PropertyType.NUMBER, name = "boom volume", description = "amount to increase/decrease db of boom sound", category = "Other", max = 5, min = -50, hidden = true)
+    public int boomVolume = -35;
+
+    @Property(type = PropertyType.SWITCH, name = "toggoe boom sound", category = "Other", hidden = true)
+    public boolean boomAllowed = true;
+
     public Config() {
         super(new File("./config/JesusClient/config.toml"), "JesusClient", (PropertyCollector)new JVMAnnotationPropertyCollector(), new ConfigSorting());
         String[] ka = { "kaPlayers", "kaMobs", "kaWalls", "kaTeam", "kaDisable", "kaGui", "kaAntiNpc", "kaReach", "kaFov", "kaMode", "kaBlock", "kaRotationRange" };
