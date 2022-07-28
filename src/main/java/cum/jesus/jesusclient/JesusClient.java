@@ -1,5 +1,7 @@
 package cum.jesus.jesusclient;
 
+// TEST
+
 import cum.jesus.jesusclient.command.CommandManager;
 import cum.jesus.jesusclient.command.commands.BanCommand;
 import cum.jesus.jesusclient.command.commands.JesusCommad;
