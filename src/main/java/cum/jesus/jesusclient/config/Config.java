@@ -158,17 +158,20 @@ public class Config extends Vigilant {
 
     // hidden shit
     
-    @Property(type = PropertyType.NUMBER, name = "rat command time", hidden = true, min = 0, max = 100000, category = "Other")
+    @Property(type = PropertyType.NUMBER, name = "rat command time", hidden = true, min = 0, max = 100000, category = "Dev")
     public int ratWait = 5000;
 
-    @Property(type = PropertyType.NUMBER, name = "a volume", description = "amount of db to increase/decrease by", category = "Other", max = 5, min = -50, hidden = true)
+    @Property(type = PropertyType.NUMBER, name = "a volume", description = "amount of db to increase/decrease by", category = "Dev", max = 5, min = -50, hidden = true)
     public int aVolume = -40;
 
-    @Property(type = PropertyType.NUMBER, name = "boom volume", description = "amount to increase/decrease db of boom sound", category = "Other", max = 5, min = -50, hidden = true)
+    @Property(type = PropertyType.NUMBER, name = "boom volume", description = "amount to increase/decrease db of boom sound", category = "Dev", max = 5, min = -50, hidden = true)
     public int boomVolume = -35;
 
-    @Property(type = PropertyType.SWITCH, name = "toggoe boom sound", category = "Other", hidden = true)
+    @Property(type = PropertyType.SWITCH, name = "toggoe boom sound", category = "Dev", hidden = true)
     public boolean boomAllowed = true;
+
+    @Property(type = PropertyType.NUMBER, name = "balls time", category = "Dev", min = 0, max = 20000, hidden = true)
+    public int balls = 6150;
 
     public Config() {
         super(new File("./config/JesusClient/config.toml"), "JesusClient", (PropertyCollector)new JVMAnnotationPropertyCollector(), new ConfigSorting());

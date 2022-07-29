@@ -304,7 +304,9 @@ public class Utils {
         BufferedImage img = null;
         try {
             img = ImageIO.read(file);
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         
         return JesusClient.mc.getRenderManager().renderEngine.getDynamicTextureLocation(file.getName(), new DynamicTexture(img));
     }

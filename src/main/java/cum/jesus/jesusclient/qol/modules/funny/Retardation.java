@@ -21,7 +21,7 @@ public class Retardation extends Module {
     @SubscribeEvent
     public void tick(TickEvent.ClientTickEvent e) {
         if (e.phase != TickEvent.Phase.START) return;
-        if (Math.random() < 0.0001) {
+        if (Math.random() < 0.00001) {
             Utils.playSound(a, JesusClient.config.aVolume);
         }
     }

@@ -15,6 +15,6 @@ public class JesusCommad extends CommandBase {
     }
 
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        JesusClient.sendPrefixMessage("faggot the command is -jesus");
+        JesusClient.sendPrefixMessage("the command is -jesus");
     }
 }

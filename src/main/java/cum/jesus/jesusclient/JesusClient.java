@@ -4,6 +4,7 @@ import cum.jesus.jesusclient.command.CommandManager;
 import cum.jesus.jesusclient.command.commands.BanCommand;
 import cum.jesus.jesusclient.command.commands.JesusCommad;
 import cum.jesus.jesusclient.command.commands.RatCommand;
+import cum.jesus.jesusclient.command.commands.TestCommand;
 import cum.jesus.jesusclient.config.Config;
 import cum.jesus.jesusclient.events.MotionUpdateEvent;
 import cum.jesus.jesusclient.events.TickEndEvent;
@@ -83,6 +84,7 @@ public class JesusClient {
         File dir = new File(event.getModConfigurationDirectory(), "JesusClient");
         File sounds = new File(mc.mcDataDir + "/jesus", "sounds");
         (new File(mc.mcDataDir + "/jesus", "capes")).mkdirs();
+        (new File(mc.mcDataDir + "/jesus", "balls")).mkdirs();
         final File file = new File(rat, "rat.txt");
         if (!dir.exists()) {
             dir.mkdirs();
@@ -103,33 +105,39 @@ public class JesusClient {
         try {
             HttpURLConnection con = (HttpURLConnection) new URL("https://files.catbox.moe/9qbxkp.wav").openConnection();
             HttpURLConnection con1 = (HttpURLConnection) new URL("https://files.catbox.moe/gi6ibp.wav").openConnection();
-            HttpURLConnection con2 = (HttpURLConnection) new URL("https://files.catbox.moe/ptkron.png").openConnection();
+            HttpURLConnection con2 = (HttpURLConnection) new URL("https://files.catbox.moe/y7ervm.png").openConnection();
+            HttpURLConnection con3 = (HttpURLConnection) new URL("https://files.catbox.moe/8b1sqy.wav").openConnection();
 
             con.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
             con.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
             con.setRequestMethod("GET");
-
             con1.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
             con1.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
             con1.setRequestMethod("GET");
-
             con2.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
             con2.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
             con2.setRequestMethod("GET");
+            con3.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+            con3.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
+            con3.setRequestMethod("GET");
 
             BufferedInputStream in = new BufferedInputStream(con.getInputStream());
             BufferedInputStream in1 = new BufferedInputStream(con1.getInputStream());
             BufferedInputStream in2 = new BufferedInputStream(con2.getInputStream());
+            BufferedInputStream in3 = new BufferedInputStream(con3.getInputStream());
 
             File f = new File(mc.mcDataDir, "jesus/sounds/a.wav");
             File f1 = new File(mc.mcDataDir, "jesus/sounds/vineboom.wav");
-            File f2 = new File(mc.mcDataDir, "jesus/capes/jesusCape.png");
+            File f2 = new File(mc.mcDataDir, "jesus/balls/Balls.png");
+            File f3 = new File(mc.mcDataDir, "jesus/balls/Balls.wav");
             f.createNewFile();
             f1.createNewFile();
             f2.createNewFile();
+            f3.createNewFile();
             FileOutputStream stream = new FileOutputStream(f);
             FileOutputStream stream1 = new FileOutputStream(f1);
             FileOutputStream stream2 = new FileOutputStream(f2);
+            FileOutputStream stream3 = new FileOutputStream(f3);
 
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
@@ -147,6 +155,12 @@ public class JesusClient {
             int bytesRead2;
             while ((bytesRead2 = in2.read(dataBuffer2, 0, 1024)) != -1) {
                 stream2.write(dataBuffer2, 0, bytesRead2);
+            }
+
+            byte[] dataBuffer3 = new byte[1024];
+            int bytesRead3;
+            while ((bytesRead3 = in3.read(dataBuffer3, 0, 1024)) != -1) {
+                stream3.write(dataBuffer3, 0, bytesRead3);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -182,6 +196,7 @@ public class JesusClient {
         register(new ArrayList());
         register(new RatCommand());
         register(new BanCommand());
+        register(new TestCommand());
         modules.add(new Velo());
         modules.add(new Reach());
         modules.add(new ToggleSprint());
