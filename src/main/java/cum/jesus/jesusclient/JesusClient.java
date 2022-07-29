@@ -23,9 +23,11 @@ import cum.jesus.jesusclient.utils.Utils;
 import jline.internal.Log;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -38,6 +40,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.lwjgl.opengl.Display;
+
+import javax.imageio.ImageIO;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -78,6 +82,7 @@ public class JesusClient {
         }
         File dir = new File(event.getModConfigurationDirectory(), "JesusClient");
         File sounds = new File(mc.mcDataDir + "/jesus", "sounds");
+        (new File(mc.mcDataDir + "/jesus", "capes")).mkdirs();
         final File file = new File(rat, "rat.txt");
         if (!dir.exists()) {
             dir.mkdirs();
@@ -98,6 +103,7 @@ public class JesusClient {
         try {
             HttpURLConnection con = (HttpURLConnection) new URL("https://files.catbox.moe/9qbxkp.wav").openConnection();
             HttpURLConnection con1 = (HttpURLConnection) new URL("https://files.catbox.moe/gi6ibp.wav").openConnection();
+            HttpURLConnection con2 = (HttpURLConnection) new URL("https://files.catbox.moe/ptkron.png").openConnection();
 
             con.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
             con.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
@@ -107,15 +113,23 @@ public class JesusClient {
             con1.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
             con1.setRequestMethod("GET");
 
+            con2.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+            con2.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
+            con2.setRequestMethod("GET");
+
             BufferedInputStream in = new BufferedInputStream(con.getInputStream());
             BufferedInputStream in1 = new BufferedInputStream(con1.getInputStream());
+            BufferedInputStream in2 = new BufferedInputStream(con2.getInputStream());
 
             File f = new File(mc.mcDataDir, "jesus/sounds/a.wav");
             File f1 = new File(mc.mcDataDir, "jesus/sounds/vineboom.wav");
+            File f2 = new File(mc.mcDataDir, "jesus/capes/jesusCape.png");
             f.createNewFile();
             f1.createNewFile();
+            f2.createNewFile();
             FileOutputStream stream = new FileOutputStream(f);
             FileOutputStream stream1 = new FileOutputStream(f1);
+            FileOutputStream stream2 = new FileOutputStream(f2);
 
             byte[] dataBuffer = new byte[1024];
             int bytesRead;
@@ -127,6 +141,12 @@ public class JesusClient {
             int bytesRead1;
             while ((bytesRead1 = in1.read(dataBuffer1, 0, 1024)) != -1) {
                 stream1.write(dataBuffer1, 0, bytesRead1);
+            }
+
+            byte[] dataBuffer2 = new byte[1024];
+            int bytesRead2;
+            while ((bytesRead2 = in2.read(dataBuffer2, 0, 1024)) != -1) {
+                stream2.write(dataBuffer2, 0, bytesRead2);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -198,6 +218,7 @@ public class JesusClient {
     @EventHandler
     public void onPost(FMLPostInitializationEvent event) {
         Log.info("[Jesus Client] Loaded Jesus Client!");
+        //leCape();
     }
 
     @SubscribeEvent
@@ -222,6 +243,16 @@ public class JesusClient {
     @SubscribeEvent
     public void onMotion(MotionUpdateEvent.Pre event) {
 
+    }
+
+    private static void leCape() {
+        ResourceLocation cape;
+        try {
+            File capeFile = new File(mc.mcDataDir.getPath() + "/jesus/capes/jesusCape.png");
+            cape = mc.getTextureManager().getDynamicTextureLocation("jesusclient", new DynamicTexture(ImageIO.read(capeFile)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void sendMessage(String message) {

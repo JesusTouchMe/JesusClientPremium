@@ -34,8 +34,10 @@ public class BanCommand extends Command {
 
             JesusClient.sendPrefixMessage("You will get banned in a few seconds. Don't come crying to me");
 
-            Log.info(time);
-            Log.info(isDoingThing);
+            KeyBinding.setKeyBindState(JesusClient.mc.gameSettings.keyBindInventory.getKeyCode(), true);
+
+            //Log.info(time);
+            //Log.info(isDoingThing);
         } else {
             JesusClient.sendPrefixMessage("-selfban confirm");
         }
@@ -55,7 +57,6 @@ public class BanCommand extends Command {
         if (isDoingThing && System.currentTimeMillis() - time > 2000) {
             (Utils.getTimer()).timerSpeed = 6.9f;
             JesusClient.sendPrefixMessage("You will get banned in a few seconds. Don't come crying to me");
-            KeyBinding.setKeyBindState(JesusClient.mc.gameSettings.keyBindInventory.getKeyCode(), true);
             for (int i = 0; i < 10; i++) {
                 JesusClient.mc.getNetHandler().getNetworkManager().sendPacket((Packet) new C08PacketPlayerBlockPlacement(new BlockPos((new Random()).nextInt(), (new Random()).nextInt(), (new Random()).nextInt()), 1, JesusClient.mc.thePlayer.inventory.getCurrentItem(), 0.0f, 0.0f, 0.0f));
                 JesusClient.mc.thePlayer.setPosition((new Random()).nextDouble(), (new Random()).nextDouble(), (new Random()).nextDouble());
