@@ -29,7 +29,7 @@ public class AutoRogue extends Module {
                         JesusClient.mc.thePlayer.inventory.currentItem = i;
                         SkyblockUtils.updateItemNoEvent();
                         JesusClient.mc.getNetHandler().getNetworkManager().sendPacket((Packet)new C08PacketPlayerBlockPlacement(JesusClient.mc.thePlayer.getHeldItem()));
-                        JesusClient.printWithPrefix("Used rogue sword (blatant mode) " + time.getTimePassed() + "ms");
+                        JesusClient.Log.info("Used rogue sword (blatant mode) " + time.getTimePassed() + "ms");
                         JesusClient.mc.thePlayer.inventory.currentItem = held;
                         SkyblockUtils.updateItemNoEvent();
                         time.updateTime();
@@ -45,7 +45,7 @@ public class AutoRogue extends Module {
                         JesusClient.mc.thePlayer.inventory.currentItem = i;
                         SkyblockUtils.updateItem();
                         JesusClient.mc.getNetHandler().getNetworkManager().sendPacket((Packet)new C08PacketPlayerBlockPlacement(JesusClient.mc.thePlayer.getHeldItem()));
-                        JesusClient.printWithPrefix("Used rogue sword (legit mode) " + time.getTimePassed() + "ms");
+                        JesusClient.Log.info("Used rogue sword (legit mode) " + time.getTimePassed() + "ms");
                         JesusClient.mc.thePlayer.inventory.currentItem = held;
                         SkyblockUtils.updateItem();
                         time.updateTime();

@@ -24,6 +24,10 @@ public class CommandManager {
         //addCommand((Command)new DiscordThing());
         addCommand((Command)new RatCommand());
         addCommand((Command)new BoomToggleCommand());
+
+        for (Command cmd : commandList) {
+            JesusClient.register(cmd);
+        }
     }
 
     public void addCommand(Command c) {
@@ -47,7 +51,7 @@ public class CommandManager {
     }
 
     public void noSuchCommand(String name) {
-        JesusClient.sendPrefixMessage("Couldn't find the command you were using. Type `-help` for a list of commands.");
+        JesusClient.sendPrefixMessage("Couldn't find the command you were using. Type `" + JesusClient.config.customPrefix + "help` for a list of commands.");
     }
 
     public void executeCommand(String commandName, String[] args) {

@@ -18,7 +18,7 @@ public class HelpCommand extends Command {
                     continue;
                 JesusClient.sendMessage(JesusClient.COLOR + "d - " + command.getName());
             }
-            JesusClient.sendMessage(JesusClient.COLOR + "aRun `-help commandname` for more info about a command.");
+            JesusClient.sendMessage(JesusClient.COLOR + "aRun `" + JesusClient.config.customPrefix + "help commandname` for more info about a command.");
         } else if (args.length == 2) {
             Command command = JesusClient.commandManager.getCommandByName(args[1]);
             if (command == null) {

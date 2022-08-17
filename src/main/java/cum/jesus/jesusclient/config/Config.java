@@ -144,10 +144,13 @@ public class Config extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Retardation", description = "Just adds a lot of random funny features", category = "Funny", searchTags = {"funny", "retard"})
     public boolean retard = true;
 
+    @Property(type = PropertyType.SWITCH, name = "Anti Throw", description = "Will prevent you from throwing puzzles in dungeons", category = "Funny", searchTags = {"throw", "puzzle", "solver"})
+    public boolean antiThrow = false;
+
     @Property(type = PropertyType.SWITCH, name = "Discord Rich Presence", description = "Makes you 100x cooler", category = "Other")
     public boolean discordRPC = true;
 
-    @Property(type = PropertyType.TEXT, name = "Custom Prefix", description = "Changes the prefix for the custom commands", category = "Other")
+    @Property(type = PropertyType.TEXT, name = "Custom Prefix", description = "Changes the prefix for the custom commands\nI don't think it works with /", category = "Other")
     public String customPrefix = "-";
 
     @Property(type = PropertyType.SWITCH, name = "Boob", description = "Will contain nsfw imagery. Do NOT enable this if you do not want to see nsfw", category = "Other")
@@ -173,8 +176,11 @@ public class Config extends Vigilant {
     @Property(type = PropertyType.NUMBER, name = "balls time", category = "Dev", min = 0, max = 20000, hidden = true)
     public int balls = 6150;
 
+    @Property(type = PropertyType.NUMBER, name = "dont worry abt this", category = "Dev", min = 1, max = 10000, hidden = true)
+    public int retardmsg = 5000;
+
     public Config() {
-        super(new File("./config/JesusClient/config.toml"), "JesusClient", (PropertyCollector)new JVMAnnotationPropertyCollector(), new ConfigSorting());
+        super(new File("./jesus/config.toml"), "JesusClient", (PropertyCollector)new JVMAnnotationPropertyCollector(), new ConfigSorting());
         String[] ka = { "kaPlayers", "kaMobs", "kaWalls", "kaTeam", "kaDisable", "kaGui", "kaAntiNpc", "kaReach", "kaFov", "kaMode", "kaBlock", "kaRotationRange" };
         String[] cum = { "cumStash", "cumInvMode", "cumMainSlot" };
         String[] boner = { "bonerDelay", "bonerMainSlot" };

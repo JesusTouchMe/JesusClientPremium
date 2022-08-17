@@ -15,6 +15,11 @@ public class JesusCommad extends CommandBase {
     }
 
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        JesusClient.sendPrefixMessage("the command is -jesus");
+        JesusClient.sendPrefixMessage("the command is " + JesusClient.config.customPrefix + "jesus");
+    }
+
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 0;
     }
 }

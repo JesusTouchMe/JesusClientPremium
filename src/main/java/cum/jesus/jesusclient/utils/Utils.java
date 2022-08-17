@@ -1,5 +1,8 @@
 package cum.jesus.jesusclient.utils;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.events.TickEndEvent;
 import jline.internal.Log;
@@ -7,6 +10,7 @@ import kotlin.Metadata;
 import kotlin.jvm.internal.Intrinsics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -28,9 +32,12 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.*;
+
 import net.minecraft.util.Timer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
@@ -300,15 +307,71 @@ public class Utils {
             }
     }
 
-    public static ResourceLocation fileToRL(File file) {
-        BufferedImage img = null;
-        try {
-            img = ImageIO.read(file);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public static ResourceLocation fileToRL(File file) throws IOException { // crash should be fixed
+        return JesusClient.mc.getTextureManager().getDynamicTextureLocation("jesusclient", new DynamicTexture(ImageIO.read(file)));
+    }
+
+    public static ArrayList<String> getPlayersInLobby() {
+        Collection<NetworkPlayerInfo> infoMap = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
+        return new ArrayList<>();
+    }
+
+    public static class API {
+        public static JsonObject getPlayerInfo(String uuid, String apiKey) {
+            try {
+                JsonObject d = (new JsonParser()).parse(new InputStreamReader((new URL(String.format("https://api.hypixel.net/player?uuid=%s&key=%s", new Object[] { uuid, apiKey }))).openStream())).getAsJsonObject();
+                if (d.get("player") instanceof com.google.gson.JsonNull)
+                    return null;
+                return d.getAsJsonObject("player");
+            } catch (Exception e) {
+                return null;
+            }
         }
-        
-        return JesusClient.mc.getRenderManager().renderEngine.getDynamicTextureLocation(file.getName(), new DynamicTexture(img));
+
+        public static String getName(JsonObject player) {
+            try {
+                return player.get("displayname").getAsString();
+            } catch (Exception e) {
+                return "";
+            }
+        }
+
+        public static String getRank(JsonObject player) {
+            String var = "";
+            try {
+                switch (player.get("newPackageRank").getAsString()) {
+                    case "VIP":
+                        var = "§a[VIP] ";
+                        break;
+                    case "VIP_PLUS":
+                        var = "§a[VIP§6+§a] ";
+                        break;
+                    case "MVP":
+                        var = "§b[MVP] ";
+                        break;
+                    case "MVP_PLUS":
+                        var = "§b[MVP§4+§b] ";
+                        break;
+                }
+                if (Objects.equals(player.get("newPackageRank").getAsString(), "MVP_PLUS") && Objects.equals(player.get("monthlyPackageRank").getAsString(), "SUPERSTAR")) {
+                    var = "§6[MVP§0++§6] ";
+                }
+            } catch (Exception e) {
+                var = "non";
+            }
+
+            return var;
+        }
+
+        public static String fullName(JsonObject player) {
+            String rank = getRank(player);
+            String name = getName(player);
+            if (rank == "non") {
+                return "§7" + name + ": ";
+            } else {
+                return rank + name + "§f: ";
+            }
+        }
     }
 
     @Metadata(mv = {1, 1, 16}, bv = {1, 0, 3}, k = 1, d1 = {"\000\026\n\002\030\002\n\002\020\000\n\000\n\002\020\013\n\000\n\002\030\002\n\000\bf\030\0002\0020\001J\022\020\002\032\0020\0032\b\020\004\032\004\030\0010\005H&\006\006"}, d2 = {"Lcum/jesus/jesusclient/utils/Utils$Collidable;", "", "collideBlock", "", "block", "Lnet/minecraft/block/Block;", "JesusClient"})

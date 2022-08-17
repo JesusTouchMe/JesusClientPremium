@@ -17,7 +17,7 @@ public class Parkour extends Module {
         if (JesusClient.config.parkour) {
             if (JesusClient.mc.thePlayer.onGround && !JesusClient.mc.thePlayer.isSneaking() && !JesusClient.mc.gameSettings.keyBindSneak.isPressed() && JesusClient.mc.theWorld.getCollidingBoundingBoxes((Entity)JesusClient.mc.thePlayer, JesusClient.mc.thePlayer.getEntityBoundingBox().offset(0.0D, -0.5D, 0.0D).expand(-0.001D, 0.0D, -0.001D)).isEmpty()) {
                 JesusClient.mc.thePlayer.jump();
-                JesusClient.printWithPrefix("jumping");
+                JesusClient.Log.info("jumping");
             }
         }
     }

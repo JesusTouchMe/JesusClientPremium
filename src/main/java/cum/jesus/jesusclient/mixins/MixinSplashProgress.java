@@ -29,7 +29,7 @@ public class MixinSplashProgress {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            JesusClient.printWithPrefix("funny image fucked");
+            JesusClient.Log.error("funny image fucked");
             return original;
         }
     }

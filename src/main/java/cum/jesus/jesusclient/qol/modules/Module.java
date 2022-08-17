@@ -5,10 +5,9 @@ import cum.jesus.jesusclient.utils.MilliTimer;
 import net.minecraft.client.Minecraft;
 
 public abstract class Module {
-    private String h = "literally just need this to get module names easier";
     protected Minecraft mc = Minecraft.getMinecraft();
     private final String arraylistName;
-    private final boolean toggled;
+    private boolean toggled;
     public MilliTimer toggledTime = new MilliTimer();
 
     public Module(String name, boolean toggled) {
@@ -38,5 +37,22 @@ public abstract class Module {
                 return m;
         }
         return null;
+    }
+
+    public void setToggled(boolean j_82781x) {
+        this.toggled = j_82781x;
+        this.toggledTime.updateTime();
+    }
+
+    public void toggle() {
+        this.toggled = !this.toggled;
+    }
+
+    public void setEnabled() {
+        this.toggled = true;
+    }
+
+    public void setDisabled() {
+        this.toggled = false;
     }
 }

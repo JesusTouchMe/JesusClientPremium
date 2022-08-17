@@ -21,7 +21,7 @@ public class MixinGuiScreen {
                 boolean hasArgs = c.contains(" ");
                 String[] args = hasArgs ? c.split(" ") : null;
 
-                JesusClient.printWithPrefix("Ran command " + cm);
+                JesusClient.Log.info("Ran command " + cm);
 
                 JesusClient.commandManager.executeCommand(cm.split(" ")[0], args);
             }
