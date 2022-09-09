@@ -48,6 +48,7 @@ public class TestCommand extends Command {
     }
 
     public void onCall(String[] args) {
+        JesusClient.sendPrefixMessage(JesusClient.mc.thePlayer.getGameProfile().getId().toString().replace("-", ""));
         JesusClient.sendPrefixMessage("command manager works");
         //Utils.playSound(a, -40);
 

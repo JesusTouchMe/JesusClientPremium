@@ -25,9 +25,6 @@ public class Retardation extends Module {
         super("Retardation", JesusClient.config.retard);
     }
 
-    private final String[] cumsters = JesusClient.people;
-    private final String[] ILILILLILILLILILILL = JesusClient.obfMessages;
-
     public static String sender = "";
 
     @SubscribeEvent

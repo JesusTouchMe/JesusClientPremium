@@ -7,4 +7,6 @@ public class AntiThrow extends Module {
     public AntiThrow() {
         super("Anti Throw", JesusClient.config.antiThrow);
     }
+
+    // TODO: make
 }

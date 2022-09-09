@@ -24,6 +24,7 @@ public class CommandManager {
         //addCommand((Command)new DiscordThing());
         addCommand((Command)new RatCommand());
         addCommand((Command)new BoomToggleCommand());
+        addCommand((Command)new Discord());
 
         for (Command cmd : commandList) {
             JesusClient.register(cmd);

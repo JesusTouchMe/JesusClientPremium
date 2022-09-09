@@ -153,7 +153,7 @@ public class Config extends Vigilant {
     @Property(type = PropertyType.TEXT, name = "Custom Prefix", description = "Changes the prefix for the custom commands\nI don't think it works with /", category = "Other")
     public String customPrefix = "-";
 
-    @Property(type = PropertyType.SWITCH, name = "Boob", description = "Will contain nsfw imagery. Do NOT enable this if you do not want to see nsfw", category = "Other")
+    @Property(type = PropertyType.SWITCH, name = "Boob", description = "Will contain nsfw imagery. Do NOT enable this if you share your pc with a 5 year old child", category = "Other")
     public boolean boob = false;
 
     @Property(type = PropertyType.SWITCH, name = "ArrayList", description = "Toggle arraylist", category = "Other", hidden = true)

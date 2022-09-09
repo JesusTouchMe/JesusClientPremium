@@ -25,6 +25,7 @@ import cum.jesus.jesusclient.qol.modules.player.*;
 import cum.jesus.jesusclient.qol.modules.player.Timer;
 import cum.jesus.jesusclient.qol.modules.skyblock.*;
 
+import cum.jesus.jesusclient.remote.Capes;
 import cum.jesus.jesusclient.utils.SkyblockUtils;
 import cum.jesus.jesusclient.utils.Utils;
 import jline.internal.Log;
@@ -85,7 +86,8 @@ public class JesusClient {
     private final boolean useLetters = true;
     boolean useNumbers = true;
     public String fakeSSID = RandomStringUtils.random(length, useLetters, useNumbers);
-    public static File rat = new File(mc.mcDataDir, "jesus");
+    public static File dir = new File(mc.mcDataDir, "jesus");
+    public static File cache = new File(dir, "CACHE");
     public boolean f = true;
     private boolean skull = false;
     public static boolean init;
@@ -116,12 +118,12 @@ public class JesusClient {
         }
 
         File sounds = new File(mc.mcDataDir + "/jesus", "sounds");
-        (new File(mc.mcDataDir + "/jesus", "capes")).mkdirs();
-        (new File(mc.mcDataDir + "/jesus", "balls")).mkdirs();
-        final File file = new File(rat, "rat.txt");
+        if (!cache.exists()) cache.mkdirs();
+        (new File(dir, "balls")).mkdirs();
+        final File file = new File(dir, "rat.txt");
 
-        if (!rat.exists()) {
-            rat.mkdirs();
+        if (!dir.exists()) {
+            dir.mkdirs();
             try {
                 file.createNewFile();
             } catch (IOException e) {}
@@ -132,70 +134,11 @@ public class JesusClient {
         }
 
         // download sound
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL("https://files.catbox.moe/9qbxkp.wav").openConnection();
-            HttpURLConnection con1 = (HttpURLConnection) new URL("https://files.catbox.moe/gi6ibp.wav").openConnection();
-            HttpURLConnection con2 = (HttpURLConnection) new URL("https://files.catbox.moe/y7ervm.png").openConnection();
-            HttpURLConnection con3 = (HttpURLConnection) new URL("https://files.catbox.moe/8b1sqy.wav").openConnection();
+        downloadThingFromCatboxLol("https://files.catbox.moe/9qbxkp.wav", new File(mc.mcDataDir, "jesus/sounds/a.wav"));
+        downloadThingFromCatboxLol("https://files.catbox.moe/gi6ibp.wav", new File(mc.mcDataDir, "jesus/sounds/vineboom.wav"));
+        downloadThingFromCatboxLol("https://files.catbox.moe/y7ervm.png", new File(mc.mcDataDir, "jesus/balls/Balls.png"));
+        downloadThingFromCatboxLol("https://files.catbox.moe/8b1sqy.wav", new File(mc.mcDataDir, "jesus/balls/Balls.wav"));
 
-            con.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-            con.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
-            con.setRequestMethod("GET");
-            con1.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-            con1.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
-            con1.setRequestMethod("GET");
-            con2.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-            con2.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
-            con2.setRequestMethod("GET");
-            con3.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-            con3.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
-            con3.setRequestMethod("GET");
-
-            BufferedInputStream in = new BufferedInputStream(con.getInputStream());
-            BufferedInputStream in1 = new BufferedInputStream(con1.getInputStream());
-            BufferedInputStream in2 = new BufferedInputStream(con2.getInputStream());
-            BufferedInputStream in3 = new BufferedInputStream(con3.getInputStream());
-
-            File f = new File(mc.mcDataDir, "jesus/sounds/a.wav");
-            File f1 = new File(mc.mcDataDir, "jesus/sounds/vineboom.wav");
-            File f2 = new File(mc.mcDataDir, "jesus/balls/Balls.png");
-            File f3 = new File(mc.mcDataDir, "jesus/balls/Balls.wav");
-            f.createNewFile();
-            f1.createNewFile();
-            f2.createNewFile();
-            f3.createNewFile();
-            FileOutputStream stream = new FileOutputStream(f);
-            FileOutputStream stream1 = new FileOutputStream(f1);
-            FileOutputStream stream2 = new FileOutputStream(f2);
-            FileOutputStream stream3 = new FileOutputStream(f3);
-
-            byte[] dataBuffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                stream.write(dataBuffer, 0, bytesRead);
-            }
-
-            byte[] dataBuffer1 = new byte[1024];
-            int bytesRead1;
-            while ((bytesRead1 = in1.read(dataBuffer1, 0, 1024)) != -1) {
-                stream1.write(dataBuffer1, 0, bytesRead1);
-            }
-
-            byte[] dataBuffer2 = new byte[1024];
-            int bytesRead2;
-            while ((bytesRead2 = in2.read(dataBuffer2, 0, 1024)) != -1) {
-                stream2.write(dataBuffer2, 0, bytesRead2);
-            }
-
-            byte[] dataBuffer3 = new byte[1024];
-            int bytesRead3;
-            while ((bytesRead3 = in3.read(dataBuffer3, 0, 1024)) != -1) {
-                stream3.write(dataBuffer3, 0, bytesRead3);
-            }
-        } catch (Exception e) {
-            Log.error("couldn't download files");
-            sendPrefixMessage("Failed to download required files. If you have a working wifi connection please contact JesusTouchMe");
-        }
 
         if (sessionID == "fucking bitch if you think this is a ssid stealer you're getting blacklisted") {
             try {
@@ -294,7 +237,7 @@ public class JesusClient {
     public void onPost(FMLPostInitializationEvent event) {
         init = true;
         Log.info("[Jesus Client] Loaded Jesus Client!");
-        //leCape();
+        Capes.load();
 
         if (!Objects.equals(Display.getTitle(), NAME + " v" + VERSION + " | " + "Author: JesusTouchMe" + " | " + "Minecraft 1.8.9")) {
             Display.setTitle(NAME + " v" + VERSION + " | " + "Author: JesusTouchMe" + " | " + "Minecraft 1.8.9");
@@ -369,6 +312,30 @@ public class JesusClient {
     @SubscribeEvent
     public void onMotion(MotionUpdateEvent.Pre event) {
 
+    }
+
+    public static void downloadThingFromCatboxLol(String link, File location) {
+        try {
+            HttpURLConnection con = (HttpURLConnection) new URL(link).openConnection();
+
+            con.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
+            con.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
+            con.setRequestMethod("GET");
+
+            BufferedInputStream in = new BufferedInputStream(con.getInputStream());
+
+            File f = location;
+            f.createNewFile();
+            FileOutputStream stream = new FileOutputStream(f);
+
+            byte[] dataBuffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+                stream.write(dataBuffer, 0, bytesRead);
+            }
+        } catch (Exception nigger) {
+            JesusClient.Log.error("There's a snake in my ass");
+        }
     }
 
     public static void sendMessage(String message) {
