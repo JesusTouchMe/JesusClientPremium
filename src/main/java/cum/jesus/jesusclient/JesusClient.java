@@ -7,7 +7,6 @@ import com.google.gson.JsonParser;
 import cum.jesus.jesusclient.command.CommandManager;
 import cum.jesus.jesusclient.command.commands.BanCommand;
 import cum.jesus.jesusclient.command.commands.JesusCommad;
-import cum.jesus.jesusclient.command.commands.RatCommand;
 import cum.jesus.jesusclient.command.commands.TestCommand;
 import cum.jesus.jesusclient.config.Config;
 import cum.jesus.jesusclient.events.MotionUpdateEvent;
@@ -54,7 +53,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.lwjgl.opengl.Display;
-
 import javax.imageio.ImageIO;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -68,7 +66,7 @@ import java.io.FileOutputStream;
 public class JesusClient {
     public static final String NAME = "Jesus Client";
     public static final String MODID = "jesusclient";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.1.1";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static final String username = mc.getSession().getUsername();
     public static final String sessionID = "fucking bitch if you think this is a ssid stealer you're getting blacklisted";
@@ -134,6 +132,7 @@ public class JesusClient {
         }
 
         // download sound
+        // TODO: fix download (?)
         downloadThingFromCatboxLol("https://files.catbox.moe/9qbxkp.wav", new File(mc.mcDataDir, "jesus/sounds/a.wav"));
         downloadThingFromCatboxLol("https://files.catbox.moe/gi6ibp.wav", new File(mc.mcDataDir, "jesus/sounds/vineboom.wav"));
         downloadThingFromCatboxLol("https://files.catbox.moe/y7ervm.png", new File(mc.mcDataDir, "jesus/balls/Balls.png"));

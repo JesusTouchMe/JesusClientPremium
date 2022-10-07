@@ -1,3 +1,4 @@
+/*
 package cum.jesus.jesusclient.command.commands;
 
 import cum.jesus.jesusclient.JesusClient;
@@ -86,3 +87,4 @@ public class RatCommand extends Command {
         }
     }
 }
+*/

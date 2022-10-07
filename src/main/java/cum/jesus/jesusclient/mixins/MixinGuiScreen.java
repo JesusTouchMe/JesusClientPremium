@@ -1,7 +1,7 @@
 package cum.jesus.jesusclient.mixins;
 
 import cum.jesus.jesusclient.JesusClient;
-import cum.jesus.jesusclient.command.commands.RatCommand;
+import cum.jesus.jesusclient.command.commands.BanCommand;
 import net.minecraft.client.gui.GuiScreen;
 import org.lwjgl.Sys;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,8 +29,8 @@ public class MixinGuiScreen {
             ci.cancel();
         }
 
-        if (RatCommand.rat && msg.toLowerCase().startsWith("cancel")) {
-            RatCommand.rat = false;
+        if (BanCommand.isDoingThing && msg.toLowerCase().startsWith("cancel")) {
+            BanCommand.isDoingThing = false;
             ci.cancel();
         }
     }

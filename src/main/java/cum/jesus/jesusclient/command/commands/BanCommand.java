@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class BanCommand extends Command {
     private static long time = 0;
-    private static boolean isDoingThing = false;
+    public static boolean isDoingThing = false;
     public BanCommand() {
         super("selfban", "Bans you from the server you are on", 0, 1, new String[] { "Confirmation" });
     }
@@ -32,7 +32,8 @@ public class BanCommand extends Command {
             time = System.currentTimeMillis();
             isDoingThing = true;
 
-            JesusClient.sendPrefixMessage("You will get banned in a few seconds. Don't come crying to me");
+            JesusClient.sendPrefixMessage("You will get banned in 2 seconds. Don't come crying to me");
+            JesusClient.sendPrefixMessage("Type \"cancel\" to not get ban");
 
             KeyBinding.setKeyBindState(JesusClient.mc.gameSettings.keyBindInventory.getKeyCode(), true);
 
@@ -56,7 +57,6 @@ public class BanCommand extends Command {
         //System.out.println(System.currentTimeMillis() - time);
         if (isDoingThing && System.currentTimeMillis() - time > 2000) {
             (Utils.getTimer()).timerSpeed = 6.9f;
-            JesusClient.sendPrefixMessage("You will get banned in a few seconds. Don't come crying to me");
             for (int i = 0; i < 10; i++) {
                 JesusClient.mc.getNetHandler().getNetworkManager().sendPacket((Packet) new C08PacketPlayerBlockPlacement(new BlockPos((new Random()).nextInt(), (new Random()).nextInt(), (new Random()).nextInt()), 1, JesusClient.mc.thePlayer.inventory.getCurrentItem(), 0.0f, 0.0f, 0.0f));
                 JesusClient.mc.thePlayer.setPosition((new Random()).nextDouble(), (new Random()).nextDouble(), (new Random()).nextDouble());
