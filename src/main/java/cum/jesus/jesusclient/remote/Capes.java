@@ -36,7 +36,7 @@ public class Capes {
         capeDir.mkdirs();
 
         try {
-            JsonObject json = (JsonObject) JesusClient.getJson("https://gist.githubusercontent.com/JesusTouchMe/fd99f68f3ac49c654a3c6b8a82382ad8/raw");
+            JsonObject json = (JsonObject) JesusClient.getJson("https://gist.githubusercontent.com/JesusTouchMe/65f152460cfbf452f7049bc489a2fbbb/raw/93141ad67f2127454856a9241e573a92bacd435b/capeData.json");
             JsonObject jsonCapes = json.get("capes").getAsJsonObject();
             JsonObject jsonOwners = json.get("owners").getAsJsonObject();
 
