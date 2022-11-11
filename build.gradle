@@ -27,7 +27,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'application'
 compileJava.options.encoding = 'UTF-8'
 
-version = "1.1.1"
+version = "1.2"
 group= "cum.jesus.jesusclient"
 archivesBaseName = "jesusclient"
 
@@ -37,6 +37,10 @@ minecraft {
     mappings = "stable_22"
     makeObfSourceJar = false
     clientRunArgs += ["--tweakClass gg.essential.loader.stage0.EssentialSetupTweaker", "--mixin mixins.jesusclient.json"]
+}
+
+runClient {
+    args "--username", "jesus"
 }
 
 repositories {
@@ -60,6 +64,7 @@ dependencies {
     packageLib('com.github.jagrosh:DiscordIPC:e29d6d8') {
         exclude module: 'log4j'
     }
+    implementation("org.openjdk.nashorn:nashorn-core:15.4")
 }
 mixin {
     disableRefMapWarning = true
@@ -88,6 +93,7 @@ shadowJar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     configurations = [project.configurations.packageLib]
     relocate 'com.jagrosh.discordipc', 'cum.jesus.jesusclient.shadow.jagrosh.discordipc'
+    //relocate 'gg.essential.vigilance', 'cum.jesus.jesusclient.shadow.vigilance'
     mainClassName = ""
 }
 

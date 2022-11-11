@@ -2,6 +2,7 @@ package cum.jesus.jesusclient.command.commands;
 
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.command.Command;
+import cum.jesus.jesusclient.qol.modules.render.ClickGuiModule;
 import cum.jesus.jesusclient.utils.Utils;
 import jline.internal.Log;
 import net.minecraft.client.Minecraft;
@@ -40,7 +41,7 @@ public class BanCommand extends Command {
             //Log.info(time);
             //Log.info(isDoingThing);
         } else {
-            JesusClient.sendPrefixMessage("-selfban confirm");
+            JesusClient.sendPrefixMessage(ClickGuiModule.prefix.getObject() + "selfban confirm");
         }
     }
 

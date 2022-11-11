@@ -2,6 +2,7 @@ package cum.jesus.jesusclient.qol.modules.movement;
 
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.events.*;
+import cum.jesus.jesusclient.qol.modules.Category;
 import cum.jesus.jesusclient.qol.modules.Module;
 import cum.jesus.jesusclient.utils.Utils;
 import net.minecraft.block.BlockLiquid;
@@ -11,15 +12,17 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class Jesus extends Module {
+    public static Jesus INSTANCE = new Jesus();
+
     private boolean nextTick;
 
     public Jesus() {
-        super("Jesus", JesusClient.config.jesusHack);
+        super("Jesus", "Walk on water", Category.MOVEMENT);
     }
 
     @SubscribeEvent
     public void onUpdate(UpdateEvent event) {
-        if (JesusClient.config.jesusHack) {
+        if (getState()) {
             if (Utils.collideBlock(mc.thePlayer.getEntityBoundingBox(), block -> block instanceof net.minecraft.block.BlockLiquid) && mc.thePlayer.isInsideOfMaterial(Material.air) && !mc.thePlayer.isSneaking()) {
                 mc.thePlayer.motionY = 0.08D;
             }

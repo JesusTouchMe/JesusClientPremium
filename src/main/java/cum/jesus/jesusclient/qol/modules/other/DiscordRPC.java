@@ -1,15 +1,12 @@
 package cum.jesus.jesusclient.qol.modules.other;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.jagrosh.discordipc.IPCClient;
 import com.jagrosh.discordipc.IPCListener;
 import com.jagrosh.discordipc.entities.RichPresence;
-import cum.jesus.jesusclient.JesusClient;
+import cum.jesus.jesusclient.qol.modules.Category;
 import cum.jesus.jesusclient.qol.modules.Module;
 import net.minecraft.client.Minecraft;
 
-import java.io.InputStreamReader;
 import java.time.OffsetDateTime;
 
 public class DiscordRPC extends Module {
@@ -18,10 +15,10 @@ public class DiscordRPC extends Module {
     private static RichPresence richPresence;
 
     public DiscordRPC() {
-        super("Discord RPC", JesusClient.config.discordRPC);
+        super("Discord RPC", "", Category.OTHER);
     }
 
-    public void enable() {
+    public void onEnable() {
         if (!hasConnected) {
             setupIPC();
         } else {
@@ -31,6 +28,7 @@ public class DiscordRPC extends Module {
                 e.printStackTrace();
             }
         }
+        super.onEnable();
     }
 
     public static void setupIPC() {

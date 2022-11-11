@@ -6,25 +6,21 @@ import gg.essential.vigilance.data.JVMAnnotationPropertyCollector;
 import gg.essential.vigilance.data.Property;
 import gg.essential.vigilance.data.PropertyCollector;
 import gg.essential.vigilance.data.PropertyType;
-import java.awt.Color;
 import java.io.File;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StringTranslate;
-import scala.sys.Prop;
 
 public class Config extends Vigilant {
     public static Config INSTANCE = new Config();
 
     // "Combat", "Skyblock Qol", "Player", "Macros", "Movement", "Funny", "Other" : categories
 
-    private final String WIP = JesusClient.COLOR + "b[WIP] " + JesusClient.COLOR + "f";
+    public final String WIP = JesusClient.COLOR + "b[WIP] " + JesusClient.COLOR + "f";
 
-    private final String risky = JesusClient.COLOR + "cHella risky. Don't cry if you get banned. " + JesusClient.COLOR + "f";
+    public static final String risky = JesusClient.COLOR + "cHella risky. Don't cry if you get banned. " + JesusClient.COLOR + "f";
 
-    @Property(type = PropertyType.SWITCH, name = "Reach", description = "Increases the reach that you can hit things from", category = "Combat", subcategory = "Player")
+    @Property(type = PropertyType.SWITCH, name = "Reach", description = "Increases the reach that you can hit things from", category = "Combat", subcategory = "Reach")
     public boolean reach = false;
 
-    @Property(type = PropertyType.DECIMAL_SLIDER, name = "Reach Amount", description = "Changes the amount of reach you have. Vanilla reach is 3", category = "Combat", subcategory = "Player", minF = 2f, maxF = 4.5f, decimalPlaces = 1)
+    @Property(type = PropertyType.DECIMAL_SLIDER, name = "Reach Amount", description = "Changes the amount of reach you have. Vanilla reach is 3", category = "Combat", subcategory = "Reach", minF = 2f, maxF = 4.5f, decimalPlaces = 1)
     public float reachAmount = 3;
 
     @Property(type = PropertyType.SWITCH, name = "Anti KB", description = "Disables knockback", category = "Combat", subcategory = "Player")
@@ -69,7 +65,7 @@ public class Config extends Vigilant {
     @Property(type = PropertyType.SELECTOR, name = "Sorting", category = "Combat", subcategory = "KillAura", options = { "Distance", "Health", "Hurt", "Hp reverse" })
     public int kaMode = 0;
 
-    @Property(type = PropertyType.SWITCH, name = "Cum (Snowball)", description = "Automatically throws every single snowball in your hotbar or inventory. \nRequires you to press the keybind to actually throw them", category = "Combat", subcategory = "Snowball")
+    @Property(type = PropertyType.SWITCH, name = "Cum", description = "Automatically throws every single snowball in your hotbar or inventory. \nRequires you to press the keybind to actually throw them", category = "Combat", subcategory = "Snowball")
     public boolean cumEnabled = false;
 
     @Property(type = PropertyType.SWITCH, name = "PickupStash", category = "Combat", subcategory = "Snowball")
@@ -81,10 +77,10 @@ public class Config extends Vigilant {
     @Property(type = PropertyType.SLIDER, name = "Main Slot", description = "Leave on 0 if you wanna use old slot", category = "Combat", subcategory = "Snowball", min = 0, max = 8)
     public int cumMainSlot = 0;
 
-    @Property(type = PropertyType.SWITCH, name = "Auto Rogue", description = "Automatically clicks a rogue sword in your hotbar every 30 seconds", category = "Skyblock", subcategory = "Dungeons")
+    @Property(type = PropertyType.SWITCH, name = "Auto Rogue", description = "Automatically clicks a rogue sword in your hotbar every 30 seconds", category = "Skyblock", subcategory = "Auto Rogue")
     public boolean autoRogue = false;
 
-    @Property(type = PropertyType.CHECKBOX, name = "More Legit", description = "Randomizes the time when it clicks so it doesn't seem too sus", category = "Skyblock", subcategory = "Dungeons")
+    @Property(type = PropertyType.CHECKBOX, name = "More Legit", description = "Randomizes the time when it clicks so it doesn't seem too sus", category = "Skyblock", subcategory = "Auto Rogue")
     public boolean legitRogue = false;
 
     @Property(type = PropertyType.SWITCH, name = "Boner Thrower", description = "Automatically throws every bonemerang in your hotbar (or inventory). \nThe keybind needs to be pressed to actually shoot", category = "Skyblock", subcategory = "Boner")
@@ -102,13 +98,13 @@ public class Config extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Jesus", description = "I had to add this. Makes you walk on water. A bit broken rn lol", category = "Movement")
     public boolean jesusHack = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Sprint", description = "Sprints.", category = "Movement")
+    @Property(type = PropertyType.SWITCH, name = "Sprint", description = "Sprints.", category = "Movement", subcategory = "Sprint")
     public boolean toggleSprint = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Omni Sprint", description = "Sprints no matter which direction you're looking", category = "Movement")
+    @Property(type = PropertyType.SWITCH, name = "Omni Sprint", description = "Sprints no matter which direction you're looking", category = "Movement", subcategory = "Sprint")
     public boolean omniSprint = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Keep Sprint", category = "Movement")
+    @Property(type = PropertyType.SWITCH, name = "Keep Sprint", category = "Movement", subcategory = "Sprint")
     public boolean keepSprint = false;
 
     @Property(type = PropertyType.SWITCH, name = "NoFall", description = "Removes fall damage", category = "Movement")
@@ -117,28 +113,28 @@ public class Config extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "Parkour", description = "Automatically jumps as soon as you reach the edge of a block. Perfect for shitters that wanna cheat in parkour", category = "Movement")
     public boolean parkour = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Toggle Fly", category = "Movement")
+    @Property(type = PropertyType.SWITCH, name = "Toggle Fly", category = "Movement", subcategory = "Flight")
     public boolean flight = false;
 
-    @Property(type = PropertyType.DECIMAL_SLIDER, name = "Fly Speed", category = "Movement", minF = 0.1f, maxF = 10f)
+    @Property(type = PropertyType.DECIMAL_SLIDER, name = "Fly Speed", category = "Movement", minF = 0.1f, maxF = 10f, subcategory = "Flight")
     public float flySpeed = 1.0f;
 
-    @Property(type = PropertyType.SWITCH, name = "Toggle BHop", description = "Jumps and goes fast", category = "Movement")
+    @Property(type = PropertyType.SWITCH, name = "Toggle BHop", description = "Jumps and goes fast", category = "Movement", subcategory = "BHop")
     public boolean bHop = false;
 
-    @Property(type = PropertyType.SELECTOR, name = "BHop Mode", category = "Movement", options = { "1 Block Jump", "Vanilla Jump", "Small Ass Jump" })
+    @Property(type = PropertyType.SELECTOR, name = "BHop Mode", category = "Movement", options = { "1 Block Jump", "Vanilla Jump", "Small Ass Jump" }, subcategory = "BHop")
     public int bHopMode = 0;
 
-    @Property(type = PropertyType.DECIMAL_SLIDER, name = "BHop Speed", category = "Movement", minF = 0.1F, maxF = 15.0F)
+    @Property(type = PropertyType.DECIMAL_SLIDER, name = "BHop Speed", category = "Movement", subcategory = "BHop", minF = 0.1F, maxF = 15.0F)
     public float bHopSpeed = 2.0F;
 
     @Property(type = PropertyType.SWITCH, name = "InvMove", description = risky + "Will most likely ban", category = "Player")
     public boolean invMove = false;
 
-    @Property(type = PropertyType.SWITCH, name = "Timer", description = "Makes the game go faster", category = "Player")
+    @Property(type = PropertyType.SWITCH, name = "Timer", description = "Makes the game go faster", category = "Player", subcategory = "Timer")
     public boolean timer = false;
 
-    @Property(type = PropertyType.DECIMAL_SLIDER, name = "Timer Multiplier", category = "Player", minF = 0.1f, maxF = 5.0f)
+    @Property(type = PropertyType.DECIMAL_SLIDER, name = "Timer Multiplier", category = "Player", minF = 0.1f, maxF = 5.0f, subcategory = "Timer")
     public float timerMult = 1.0f;
 
     @Property(type = PropertyType.SWITCH, name = "Retardation", description = "Just adds a lot of random funny features", category = "Funny", searchTags = {"funny", "retard"})
@@ -159,19 +155,16 @@ public class Config extends Vigilant {
     @Property(type = PropertyType.SWITCH, name = "ArrayList", description = "Toggle arraylist", category = "Other", hidden = true)
     public boolean arrayList = false;
 
+    @Property(type = PropertyType.SWITCH, name = "Nick Hider", description = "Changes your name to something else (client side only)", category = "Other", subcategory = "Nick Hider")
+    public boolean nickHider = true;
+
+    @Property(type = PropertyType.TEXT, name = "Name", category = "Other", subcategory = "Nick Hider")
+    public String nickHiderName = "Jesus";
+
     // hidden shit
-    
-    @Property(type = PropertyType.NUMBER, name = "rat command time", hidden = true, min = 0, max = 100000, category = "Dev")
-    public int ratWait = 5000;
 
     @Property(type = PropertyType.NUMBER, name = "a volume", description = "amount of db to increase/decrease by", category = "Dev", max = 5, min = -50, hidden = true)
     public int aVolume = -40;
-
-    @Property(type = PropertyType.NUMBER, name = "boom volume", description = "amount to increase/decrease db of boom sound", category = "Dev", max = 5, min = -50, hidden = true)
-    public int boomVolume = -35;
-
-    @Property(type = PropertyType.SWITCH, name = "toggoe boom sound", category = "Dev", hidden = true)
-    public boolean boomAllowed = true;
 
     @Property(type = PropertyType.NUMBER, name = "balls time", category = "Dev", min = 0, max = 20000, hidden = true)
     public int balls = 6150;
@@ -181,24 +174,6 @@ public class Config extends Vigilant {
 
     public Config() {
         super(new File("./jesus/config.toml"), "JesusClient", (PropertyCollector)new JVMAnnotationPropertyCollector(), new ConfigSorting());
-        String[] ka = { "kaPlayers", "kaMobs", "kaWalls", "kaTeam", "kaDisable", "kaGui", "kaAntiNpc", "kaReach", "kaFov", "kaMode", "kaBlock", "kaRotationRange" };
-        String[] cum = { "cumStash", "cumInvMode", "cumMainSlot" };
-        String[] boner = { "bonerDelay", "bonerMainSlot" };
-        for (String s : cum)
-            addDependency(s, "cumEnabled");
-        for (String s : boner)
-            addDependency(s, "boner");
-        for (String s : ka)
-            addDependency(s, "killAura");
-        addDependency("reachAmount", "reach");
-        addDependency("legitRogue", "autoRogue");
-        addDependency("omniSprint", "toggleSprint");
-        addDependency("keepSprint", "toggleSprint");
-        addDependency("bHopSpeed", "bHop");
-        addDependency("bHopMode", "bHop");
-        addDependency("flySpeed", "flight");
-        addDependency("timerMult", "timer");
-
         initialize();
     }
 }

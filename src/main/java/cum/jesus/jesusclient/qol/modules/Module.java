@@ -1,58 +1,102 @@
 package cum.jesus.jesusclient.qol.modules;
 
 import cum.jesus.jesusclient.JesusClient;
+import cum.jesus.jesusclient.config.ConfigSorting;
+import cum.jesus.jesusclient.qol.modules.render.ClickGuiModule;
 import cum.jesus.jesusclient.utils.MilliTimer;
+import cum.jesus.jesusclient.utils.Utils;
+import kotlin.jvm.internal.Intrinsics;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
+import org.lwjgl.input.Keyboard;
 
 public abstract class Module {
-    protected Minecraft mc = Minecraft.getMinecraft();
-    private final String arraylistName;
-    private boolean toggled;
-    public MilliTimer toggledTime = new MilliTimer();
+    protected static final Minecraft mc = Minecraft.getMinecraft();
+    private String name;
+    private String description;
+    private Category category;
+    private boolean canBeEnabled;
+    private boolean hidden;
+    private int keybind;
+    private boolean state;
 
-    public Module(String name, boolean toggled) {
-        this.arraylistName = name;
-        this.toggled = toggled;
+    protected Module(String name, String description, Category moduleCategory) {
+        this(name, description, moduleCategory, true, false, Keyboard.KEY_NONE);
+    }
+
+    protected Module(String name, String description, Category category, boolean canBeEnabled, boolean hidden, int keybind) {
+        this.name = name;
+        this.description = description;
+        this.category = category;
+        this.canBeEnabled = canBeEnabled;
+        this.hidden = hidden;
+        this.keybind = keybind;
     }
 
     public String getName() {
-        return this.arraylistName;
+        return name;
     }
 
-    public boolean isToggled() {
-        return this.toggled;
+    public String getDescription() {
+        return description;
     }
 
-    public static <T> T getModule(Class<T> module) {
-        for (Module m : JesusClient.modules) {
-            if (m.getClass().equals(module))
-                return (T)m;
+    public Category getCategory() {
+        return category;
+    }
+
+    public boolean isCanBeEnabled() {
+        return canBeEnabled;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public int getKeybind() {
+        return keybind;
+    }
+
+    public void setKeybind(int keybind) {
+        this.keybind = keybind;
+    }
+
+    public boolean getState() {
+        return state;
+    }
+
+    public void setState(boolean state) {
+        if (state) {
+            this.state = true;
+
+            onEnable();
+
+            if (!ClickGuiModule.hideNotifs.getObject()) {
+                JesusClient.sendPrefixMessage(Utils.getColouredBoolean(state) + " " + getName());
+            }
+
+        } else {
+            this.state = false;
+            onDisable();
+
+            if (!ClickGuiModule.hideNotifs.getObject()){
+                JesusClient.sendPrefixMessage(Utils.getColouredBoolean(state) + " " + getName());
+            }
         }
-        return null;
-    }
-
-    public static Module getModuleByName(String name) {
-        for (Module m : JesusClient.modules) {
-            if (m.getName().equalsIgnoreCase(name))
-                return m;
-        }
-        return null;
-    }
-
-    public void setToggled(boolean j_82781x) {
-        this.toggled = j_82781x;
-        this.toggledTime.updateTime();
     }
 
     public void toggle() {
-        this.toggled = !this.toggled;
+        setState(!getState());
     }
 
-    public void setEnabled() {
-        this.toggled = true;
+    protected void onEnable() {
+
     }
 
-    public void setDisabled() {
-        this.toggled = false;
+    protected void onDisable() {
+
     }
 }

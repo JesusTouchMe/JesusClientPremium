@@ -7,6 +7,7 @@ import cum.jesus.jesusclient.events.MoveEvent;
 import cum.jesus.jesusclient.events.PlayerUpdateEvent;
 import cum.jesus.jesusclient.events.UpdateEvent;
 import cum.jesus.jesusclient.qol.modules.combat.KillAura;
+import cum.jesus.jesusclient.qol.modules.movement.ToggleSprint;
 import cum.jesus.jesusclient.utils.MovementUtils;
 import cum.jesus.jesusclient.utils.RotationUtils;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -184,7 +185,7 @@ public abstract class PlayerSPMixin extends AbstractClientPlayerMixin {
         if (isPotionActive(Potion.jump.id))
             this.motionY += ((getActivePotionEffect(Potion.jump).getAmplifier() + 1) * 0.1F);
         if (isSprinting()) {
-            float f = ((JesusClient.config.toggleSprint && JesusClient.config.omniSprint) ? MovementUtils.getYaw() : ((JesusClient.config.killAura && KillAura.target != null && false) ? RotationUtils.getAngles((Entity)KillAura.target)[0] : this.rotationYaw)) * 0.017453292F;
+            float f = ((ToggleSprint.INSTANCE.getState() && ToggleSprint.INSTANCE.omniSprint.getObject()) ? MovementUtils.getYaw() : ((KillAura.INSTANCE.getState() && KillAura.target != null && false) ? RotationUtils.getAngles((Entity)KillAura.target)[0] : this.rotationYaw)) * 0.017453292F;
             this.motionX -= (MathHelper.sin(f) * 0.2F);
             this.motionZ += (MathHelper.cos(f) * 0.2F);
         }
@@ -207,7 +208,7 @@ public abstract class PlayerSPMixin extends AbstractClientPlayerMixin {
             f = friction / f;
             strafe *= f;
             forward *= f;
-            float yaw = (JesusClient.config.killAura && KillAura.target != null && false) ? RotationUtils.getAngles((Entity)KillAura.target)[0] : this.rotationYaw;
+            float yaw = (KillAura.INSTANCE.getState() && KillAura.target != null && false) ? RotationUtils.getAngles((Entity)KillAura.target)[0] : this.rotationYaw;
             float f1 = MathHelper.sin(yaw * 3.1415927F / 180.0F);
             float f2 = MathHelper.cos(yaw * 3.1415927F / 180.0F);
             this.motionX += (strafe * f2 - forward * f1);
@@ -234,7 +235,7 @@ public abstract class PlayerSPMixin extends AbstractClientPlayerMixin {
     @Inject(method = {"onLivingUpdate"}, at = {@At(value = "INVOKE", target = "Lnet/minecraft/client/entity/AbstractClientPlayer;onLivingUpdate()V")}, cancellable = true)
     public void onLivingUpdate(CallbackInfo ci) {
         MinecraftForge.EVENT_BUS.post((Event)new UpdateEvent());
-        if (JesusClient.config.omniSprint && JesusClient.config.toggleSprint) {
+        if (ToggleSprint.INSTANCE.omniSprint.getObject() && ToggleSprint.INSTANCE.getState()) {
             if (!MovementUtils.isMoving() || isSneaking() || (getFoodStats().getFoodLevel() <= 6.0F && !this.capabilities.allowFlying)) {
                 if (isSprinting())
                     setSprinting(false);
@@ -291,7 +292,7 @@ public abstract class PlayerSPMixin extends AbstractClientPlayerMixin {
                     EntityLivingBase entityLivingBase = null;
                     if (i > 0) {
                         targetEntity.addVelocity((-MathHelper.sin(this.rotationYaw * 3.1415927F / 180.0F) * i * 0.5F), 0.1D, (MathHelper.cos(this.rotationYaw * 3.1415927F / 180.0F) * i * 0.5F));
-                        if (JesusClient.config.toggleSprint && JesusClient.config.keepSprint) {
+                        if (ToggleSprint.INSTANCE.getState() && ToggleSprint.INSTANCE.keepSprint.getObject()) {
                             if (isSprinting()) {
                                 JesusClient.mc.getNetHandler().getNetworkManager().sendPacket((Packet)new C0BPacketEntityAction((Entity)JesusClient.mc.thePlayer, C0BPacketEntityAction.Action.STOP_SPRINTING));
                                 JesusClient.mc.getNetHandler().getNetworkManager().sendPacket((Packet)new C0BPacketEntityAction((Entity)JesusClient.mc.thePlayer, C0BPacketEntityAction.Action.START_SPRINTING));

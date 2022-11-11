@@ -2,6 +2,7 @@ package cum.jesus.jesusclient.mixins;
 
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.events.JumpEvent;
+import cum.jesus.jesusclient.qol.modules.movement.Jesus;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -47,9 +48,6 @@ public abstract class EntityLivingBaseMixin extends EntityMixin {
 
     @Shadow
     protected int entityAge;
-
-    @Shadow
-    protected double interpTargetPitch;
 
     @Shadow
     protected abstract float getJumpUpwardsMotion();
@@ -118,7 +116,7 @@ public abstract class EntityLivingBaseMixin extends EntityMixin {
 
     @Inject(method = {"onLivingUpdate"}, at = {@At(value = "FIELD", target = "Lnet/minecraft/entity/EntityLivingBase;isJumping:Z", ordinal = 1)})
     private void onJumpSection(CallbackInfo callbackInfo) {
-        if (JesusClient.config.jesusHack && !this.isJumping && !isSneaking() && isInWater())
+        if (Jesus.INSTANCE.getState() && !this.isJumping && !isSneaking() && isInWater())
             updateAITick();
     }
 }

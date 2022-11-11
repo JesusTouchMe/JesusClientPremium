@@ -1,6 +1,7 @@
 package cum.jesus.jesusclient.command.commands;
 
 import cum.jesus.jesusclient.JesusClient;
+import cum.jesus.jesusclient.qol.modules.render.ClickGuiModule;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -15,7 +16,7 @@ public class JesusCommad extends CommandBase {
     }
 
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        JesusClient.sendPrefixMessage("the command is " + JesusClient.config.customPrefix + "jesus");
+        JesusClient.sendPrefixMessage("the command is " + ClickGuiModule.prefix.getObject() + "jesus");
     }
 
     @Override

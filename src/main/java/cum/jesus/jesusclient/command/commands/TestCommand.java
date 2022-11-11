@@ -5,10 +5,13 @@ import com.google.gson.JsonObject;
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.command.Command;
 import cum.jesus.jesusclient.qol.modules.funny.Retardation;
+import cum.jesus.jesusclient.utils.MilliTimer;
+import cum.jesus.jesusclient.utils.RenderUtils;
 import cum.jesus.jesusclient.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.json.JSONString;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -27,7 +29,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import static cum.jesus.jesusclient.JesusClient.COLOR;
 import static cum.jesus.jesusclient.JesusClient.uuid;
 
@@ -37,9 +38,11 @@ public class TestCommand extends Command {
 
     private static final float width = 480.0f;
     private static final float height = 288.0f;
-    private static float x = (JesusClient.mc.displayWidth / 2) - (width / 2);
-    private static float y = (JesusClient.mc.displayHeight / 2) - (height / 2);
+    private static ScaledResolution res = new ScaledResolution(JesusClient.mc);
+    private static float x = (res.getScaledWidth() / 2f) - (width / 2);
+    private static float y = (res.getScaledHeight() / 2f) - (height / 2);
 
+    private MilliTimer timer = new MilliTimer();
     private static boolean doing = false;
     private static long time = 0;
 
@@ -78,19 +81,16 @@ public class TestCommand extends Command {
         doing = true;
         time = System.currentTimeMillis();
         Utils.playSound(ballsSound, -20);
-    }
-
-    @SubscribeEvent
-    public void t(TickEvent.ClientTickEvent t) {
-        if (System.currentTimeMillis() - time > JesusClient.config.balls)
+        if (timer.hasTimePassed(6150L)) {
             doing = false;
+        }
     }
 
     @SubscribeEvent
     public void renderPoo(TickEvent.RenderTickEvent t) {
         if (doing) {
             try {
-                Utils.drawImage(JesusClient.mc.getTextureManager().getDynamicTextureLocation("jesusclient", new DynamicTexture(ImageIO.read(ballsPng))), x, y, width, height, 100);
+                RenderUtils.drawImage(JesusClient.mc.getTextureManager().getDynamicTextureLocation("jesusclient", new DynamicTexture(ImageIO.read(ballsPng))), x, y, width, height, 100);
             } catch (IOException e) {
                 e.printStackTrace();
             }

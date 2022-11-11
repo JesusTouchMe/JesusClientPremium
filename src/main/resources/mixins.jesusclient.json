@@ -1,21 +1,24 @@
 {
   "package": "cum.jesus.jesusclient.mixins",
   "refmap": "mixins.jesusclient.refmap.json",
+  "minVersion": "0.7.10",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinSplashProgress",
-    "PlayerSPMixin",
-    "PlayerMixin",
-    "EntityMixin",
     "EntityLivingBaseMixin",
-    "MixinBlock"
+    "EntityMixin",
+    "MixinBlock",
+    "MixinSplashProgress",
+    "PlayerMixin",
+    "PlayerSPMixin",
+    "MinecraftMixin"
   ],
   "client": [
+    "AbstractClientPlayerMixin",
+    "EntityRendererMixin",
+    "MixinGuiInGame",
     "MixinGuiScreen",
     "MixinNetHandlerPlayClient",
-    "EntityRendererMixin",
-    "PlayerSPAccessor",
-    "AbstractClientPlayerMixin",
-    "MinecraftMixin"
+    "NickHider",
+    "PlayerSPAccessor"
   ]
 }

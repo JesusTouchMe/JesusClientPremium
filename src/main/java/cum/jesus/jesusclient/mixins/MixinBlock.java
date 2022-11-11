@@ -4,6 +4,7 @@ import cum.jesus.jesusclient.events.BlockBBEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -17,8 +18,8 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
@@ -35,7 +36,7 @@ public abstract class MixinBlock {
      * @author
      */
     @Inject(method = {"addCollisionBoxesToList"}, at = {@At("HEAD")})
-    public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity) {
+    public void addCollisionBoxesToList(World worldIn, BlockPos pos, IBlockState state, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity, CallbackInfo ci) {
         AxisAlignedBB axisalignedBB = getSelectedBoundingBox(worldIn, pos, state);
         BlockBBEvent blockBBEvent = new BlockBBEvent(pos, this.blockState.getBlock(), axisalignedBB);
         MinecraftForge.EVENT_BUS.post((Event)blockBBEvent);

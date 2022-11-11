@@ -13,6 +13,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -36,7 +37,7 @@ public class Capes {
         capeDir.mkdirs();
 
         try {
-            JsonObject json = (JsonObject) JesusClient.getJson("https://gist.githubusercontent.com/JesusTouchMe/65f152460cfbf452f7049bc489a2fbbb/raw/93141ad67f2127454856a9241e573a92bacd435b/capeData.json");
+            JsonObject json = (JsonObject) JesusClient.getJson("https://gist.githubusercontent.com/JesusTouchMe/65f152460cfbf452f7049bc489a2fbbb/raw/75dae1fb72db3d308d7c91607e928a4ffde1e9e5/capeData.json");
             JsonObject jsonCapes = json.get("capes").getAsJsonObject();
             JsonObject jsonOwners = json.get("owners").getAsJsonObject();
 
@@ -53,7 +54,7 @@ public class Capes {
                 playerCapes.put(owner.getKey(), owner.getValue().getAsString());
             }
 
-            JesusClient.Log.debug(getCape(JesusClient.compactUUID));
+            //JesusClient.Log.debug(getCape(JesusClient.compactUUID));
         } catch (Exception e) {
             JesusClient.Log.error("Could not download capes");
             e.printStackTrace();
@@ -63,33 +64,13 @@ public class Capes {
     private static ResourceLocation capeFromFile(String capeName, String capeUrl) {
         try {
             File file = new File(capeDir, capeName + ".png");
-            if (!file.exists()) downloadCape(capeUrl, file);
+            if (!file.exists()) JesusClient.download(capeUrl, file.getAbsolutePath());
 
             return JesusClient.mc.getTextureManager().getDynamicTextureLocation("jesusclient", new DynamicTexture(ImageIO.read(file)));
-        } catch (Exception e) {
+        } catch (IOException e) {
             JesusClient.Log.error("Failed to load the funny cape");
             e.printStackTrace();
         }
         return null;
-    }
-
-    private static void downloadCape(String imgUrl, File f) {
-        try {
-            HttpURLConnection con = (HttpURLConnection) new URL(imgUrl).openConnection();
-            con.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9");
-            con.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
-            con.setRequestMethod("GET");
-            BufferedInputStream in = new BufferedInputStream(con.getInputStream());
-            f.createNewFile();
-            FileOutputStream stream = new FileOutputStream(f);
-            byte[] dataBuffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
-                stream.write(dataBuffer, 0, bytesRead);
-            }
-        } catch (Exception e) {
-            JesusClient.Log.error("Failed to download cape(s) \n" + e.getMessage());
-            e.printStackTrace();
-        }
     }
 }

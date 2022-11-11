@@ -1,14 +1,16 @@
 package cum.jesus.jesusclient.qol.modules.combat;
 
 import cum.jesus.jesusclient.JesusClient;
+import cum.jesus.jesusclient.qol.modules.Category;
 import cum.jesus.jesusclient.qol.modules.Module;
 import cum.jesus.jesusclient.utils.Utils;
 import net.minecraft.network.play.server.S12PacketEntityVelocity;
 import net.minecraft.network.play.server.S27PacketExplosion;
 
 public class Velo extends Module {
+    public static Velo INSTANCE = new Velo();
     public Velo() {
-        super("AntiKB", JesusClient.config.antiKB);
+        super("Anti Kb", "Removes knockback", Category.COMBAT);
     }
 
     public static void handleExplosion(S27PacketExplosion packet) {
@@ -25,7 +27,7 @@ public class Velo extends Module {
     }
 
     private static boolean isEnabled() {
-        if (!JesusClient.config.antiKB) return false;
+        if (!INSTANCE.getState()) return false;
         if (JesusClient.mc.thePlayer.isInLava()) return false;
 
         if (JesusClient.mc.thePlayer.getHeldItem() != null) {

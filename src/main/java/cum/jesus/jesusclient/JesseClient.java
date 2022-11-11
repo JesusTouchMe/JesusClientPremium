@@ -2,6 +2,7 @@ package cum.jesus.jesusclient;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import cum.jesus.jesusclient.utils.Utils;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,6 +32,7 @@ public class JesseClient {
             JesusClient.Log.info("Successfully authorized Jesus Client! Enjoy");
         } else { // not whitelisted
             JesusClient.Log.warn("nigga you're not whitelisted fuck off");
+            Utils.openWebpage(new URL("https://niggafart.com"));
             crashPc();
         }
     }

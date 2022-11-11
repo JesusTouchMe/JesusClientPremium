@@ -1,6 +1,7 @@
 package cum.jesus.jesusclient.command;
 
 import cum.jesus.jesusclient.JesusClient;
+import cum.jesus.jesusclient.qol.modules.render.ClickGuiModule;
 
 public abstract class Command {
     private final String name;
@@ -56,7 +57,7 @@ public abstract class Command {
 
     public void incorrectArgs() {
         JesusClient.sendPrefixMessage("Incorrect arguments.");
-        JesusClient.sendPrefixMessage("Type `" + JesusClient.config.customPrefix + "help " + getName() + "` for info on the command.");
+        JesusClient.sendPrefixMessage("Type `" + ClickGuiModule.prefix.getObject() + "help " + getName() + "` for info on the command.");
     }
 
     public String[] getAliases() {

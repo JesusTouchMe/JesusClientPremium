@@ -2,22 +2,22 @@ package cum.jesus.jesusclient.qol.modules.player;
 
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.events.UpdateEvent;
+import cum.jesus.jesusclient.qol.modules.Category;
 import cum.jesus.jesusclient.qol.modules.Module;
+import cum.jesus.jesusclient.qol.modules.movement.ToggleSprint;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 
-import java.security.Key;
-
 public class InvMove extends Module {
     public InvMove() {
-        super("Inv Move", JesusClient.config.invMove);
+        super("InvMove", "Moves while in inventory. Will most likely get you banend", Category.PLAYER);
     }
 
     @SubscribeEvent
     public void onUpdate(UpdateEvent e) {
-        if (JesusClient.config.invMove && JesusClient.mc.currentScreen != null) {
+        if (getState() && JesusClient.mc.currentScreen != null) {
             if (JesusClient.mc.currentScreen instanceof net.minecraft.client.gui.GuiChat)
                 return;
             KeyBinding.setKeyBindState(JesusClient.mc.gameSettings.keyBindForward.getKeyCode(), Keyboard.isKeyDown(JesusClient.mc.gameSettings.keyBindForward.getKeyCode()));
@@ -43,8 +43,8 @@ public class InvMove extends Module {
                 var1.rotationYaw -= 6.0f;
             }
 
-            if (JesusClient.config.toggleSprint) {
-                KeyBinding.setKeyBindState(JesusClient.mc.gameSettings.keyBindSprint.getKeyCode(), JesusClient.config.toggleSprint);
+            if (ToggleSprint.INSTANCE.getState()) {
+                KeyBinding.setKeyBindState(JesusClient.mc.gameSettings.keyBindSprint.getKeyCode(), ToggleSprint.INSTANCE.getState());
             }
         }
     }

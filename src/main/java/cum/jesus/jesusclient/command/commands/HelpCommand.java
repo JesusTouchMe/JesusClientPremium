@@ -2,6 +2,7 @@ package cum.jesus.jesusclient.command.commands;
 
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.command.Command;
+import cum.jesus.jesusclient.qol.modules.render.ClickGuiModule;
 import scala.tools.cmd.CommandLine;
 
 public class HelpCommand extends Command {
@@ -11,16 +12,16 @@ public class HelpCommand extends Command {
 
     public void onCall(String[] args) {
         if (args == null) {
-            JesusClient.commandManager.sort();
+            JesusClient.INSTANCE.commandManager.sort();
             JesusClient.sendPrefixMessage("Available commands:");
-            for (Command command : JesusClient.commandManager.getCommandList()) {
+            for (Command command : JesusClient.INSTANCE.commandManager.getCommandList()) {
                 if (command.getName().equalsIgnoreCase("help"))
                     continue;
                 JesusClient.sendMessage(JesusClient.COLOR + "d - " + command.getName());
             }
-            JesusClient.sendMessage(JesusClient.COLOR + "aRun `" + JesusClient.config.customPrefix + "help commandname` for more info about a command.");
+            JesusClient.sendMessage(JesusClient.COLOR + "aRun `" + ClickGuiModule.prefix.getObject() + "help commandname` for more info about a command.");
         } else if (args.length == 2) {
-            Command command = JesusClient.commandManager.getCommandByName(args[1]);
+            Command command = JesusClient.INSTANCE.commandManager.getCommandByName(args[1]);
             if (command == null) {
                 JesusClient.sendPrefixMessage("Unable to find the command you were looking for.");
                 return;

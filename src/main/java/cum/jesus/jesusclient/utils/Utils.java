@@ -16,9 +16,17 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.JsonToNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.login.client.C01PacketEncryptionResponse;
+import net.minecraft.network.login.server.S01PacketEncryptionRequest;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -27,20 +35,29 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraftforge.event.world.WorldEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import java.lang.reflect.Field;
+import java.net.*;
+import java.security.PublicKey;
 import java.util.*;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import net.minecraft.util.Timer;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
+
+import javax.crypto.SecretKey;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -244,50 +261,6 @@ public class Utils {
         } catch (NullPointerException nullPointerException) {}
     }
 
-    public static void drawImage(ResourceLocation location, float x, float y, float width, float height, float opacity) {
-        if (location != null) {
-            Minecraft.getMinecraft().getTextureManager().bindTexture(location);
-            GlStateManager.color(1, 1, 1, opacity);
-            Utils.drawTexturedRect(x, y, width, height, GL11.GL_LINEAR);
-        }
-    }
-
-    public static void drawTexturedRect(float x, float y, float width, float height, int filter) {
-        drawTexturedRect(x, y, width, height, 0f, 1f, 0f , 1f, filter);
-    }
-
-    public static void drawTexturedRect(float x, float y, float width, float height, float uMin, float uMax, float vMin, float vMax, int filter) {
-        GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        drawTexturedRectNoBlend(x, y, width, height, uMin, uMax, vMin, vMax, filter);
-    }
-
-    public static void drawTexturedRectNoBlend(float x, float y, float width, float height, float uMin, float uMax, float vMin, float vMax, int filter) {
-        GlStateManager.enableTexture2D();
-
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, filter);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, filter);
-
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION_TEX);
-        worldrenderer
-                .pos(x, y+height, 0.0D)
-                .tex(uMin, vMax).endVertex();
-        worldrenderer
-                .pos(x+width, y+height, 0.0D)
-                .tex(uMax, vMax).endVertex();
-        worldrenderer
-                .pos(x+width, y, 0.0D)
-                .tex(uMax, vMin).endVertex();
-        worldrenderer
-                .pos(x, y, 0.0D)
-                .tex(uMin, vMin).endVertex();
-        tessellator.draw();
-
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-    }
-
     public static final void playSound(@NotNull File file, int volume) {
         Intrinsics.checkNotNullParameter(file, "file");
         if (file.exists())
@@ -374,8 +347,126 @@ public class Utils {
         }
     }
 
+    private static final Logger logger =  LogManager.getLogger("JesusClient");
+    private static Field fastRenderField;
+    static {
+        try {
+            fastRenderField = GameSettings.class.getDeclaredField("ofFastRender");
+            if (!fastRenderField.isAccessible()) {
+                fastRenderField.setAccessible(true);
+            }
+        } catch (NoSuchFieldException e) {}
+    }
+    public static Logger getLogger() {
+        return logger;
+    }
+
+    public static void disableFastRender() {
+        try {
+            if (fastRenderField != null) {
+                if (!fastRenderField.isAccessible())
+                    fastRenderField.setAccessible(true);
+                fastRenderField.setBoolean(JesusClient.mc.gameSettings, false);
+            }
+        } catch (IllegalAccessException illegalAccessException) {}
+    }
+
+    public static void sendEncryption(NetworkManager networkManager, SecretKey secretKey, PublicKey publicKey, S01PacketEncryptionRequest encryptionRequest) {
+        networkManager.sendPacket((Packet)new C01PacketEncryptionResponse(secretKey, publicKey, encryptionRequest.getVerifyToken()), p_operationComplete_1_ -> networkManager.enableEncryption(secretKey), new io.netty.util.concurrent.GenericFutureListener[0]);
+    }
+
+    public static ItemStack createItem(String itemArguments) {
+        try {
+            itemArguments = itemArguments.replace('&', '§');
+            Item item = new Item();
+            String[] args = null;
+            int i = 1;
+            int j = 0;
+            for (int mode = 0; mode <= Math.min(12, itemArguments.length() - 2); mode++) {
+                args = itemArguments.substring(mode).split(Pattern.quote(" "));
+                ResourceLocation resourcelocation = new ResourceLocation(args[0]);
+                item = (Item)Item.itemRegistry.getObject(resourcelocation);
+                if (item != null)
+                    break;
+            }
+            if (item == null)
+                return null;
+            if (((String[])Objects.requireNonNull(args)).length >= 2 && args[1].matches("\\d+"))
+                i = Integer.parseInt(args[1]);
+            if (args.length >= 3 && args[2].matches("\\d+"))
+                j = Integer.parseInt(args[2]);
+            ItemStack itemstack = new ItemStack(item, i, j);
+            if (args.length >= 4) {
+                StringBuilder NBT = new StringBuilder();
+                for (int nbtcount = 3; nbtcount < args.length; nbtcount++)
+                    NBT.append(" ").append(args[nbtcount]);
+                itemstack.setTagCompound(JsonToNBT.getTagFromJson(NBT.toString()));
+            }
+            return itemstack;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return null;
+        }
+    }
+
+    public static int getEnchantment(ItemStack itemStack, Enchantment enchantment) {
+        if (itemStack == null || itemStack.getEnchantmentTagList() == null || itemStack.getEnchantmentTagList().hasNoTags())
+            return 0;
+        for (int i = 0; i < itemStack.getEnchantmentTagList().tagCount(); i++) {
+            NBTTagCompound tagCompound = itemStack.getEnchantmentTagList().getCompoundTagAt(i);
+            if ((tagCompound.hasKey("ench") && tagCompound.getShort("ench") == enchantment.effectId) || (tagCompound.hasKey("id") && tagCompound.getShort("id") == enchantment.effectId))
+                return tagCompound.getShort("lvl");
+        }
+        return 0;
+    }
+
+    public static int getEnchantmentCount(ItemStack itemStack) {
+        if (itemStack == null || itemStack.getEnchantmentTagList() == null || itemStack.getEnchantmentTagList().hasNoTags())
+            return 0;
+        int c = 0;
+        for (int i = 0; i < itemStack.getEnchantmentTagList().tagCount(); i++) {
+            NBTTagCompound tagCompound = itemStack.getEnchantmentTagList().getCompoundTagAt(i);
+            if (tagCompound.hasKey("ench") || tagCompound.hasKey("id"))
+                c++;
+        }
+        return c;
+    }
+
+    public static boolean openWebpage(URI uri) {
+        Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+            try {
+                desktop.browse(uri);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean openWebpage(URL url) {
+        try {
+            return openWebpage(url.toURI());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @Metadata(mv = {1, 1, 16}, bv = {1, 0, 3}, k = 1, d1 = {"\000\026\n\002\030\002\n\002\020\000\n\000\n\002\020\013\n\000\n\002\030\002\n\000\bf\030\0002\0020\001J\022\020\002\032\0020\0032\b\020\004\032\004\030\0010\005H&\006\006"}, d2 = {"Lcum/jesus/jesusclient/utils/Utils$Collidable;", "", "collideBlock", "", "block", "Lnet/minecraft/block/Block;", "JesusClient"})
     public static interface Collidable {
         boolean collideBlock(@Nullable Block param1Block);
+    }
+
+    public static Point calculateMouseLocation() {
+        Minecraft minecraft = Minecraft.getMinecraft();
+        int scale = minecraft.gameSettings.guiScale;
+        if (scale == 0)
+            scale = 1000;
+        int scaleFactor = 0;
+        while (scaleFactor < scale && minecraft.displayWidth / (scaleFactor + 1) >= 320 && minecraft.displayHeight / (scaleFactor + 1) >= 240)
+            scaleFactor++;
+        return new Point(Mouse.getX() / scaleFactor, minecraft.displayHeight / scaleFactor - Mouse.getY() / scaleFactor - 1);
     }
 }

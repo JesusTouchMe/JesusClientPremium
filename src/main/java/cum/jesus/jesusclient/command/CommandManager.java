@@ -6,24 +6,18 @@ import java.util.List;
 
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.command.commands.*;
+import cum.jesus.jesusclient.qol.modules.render.ClickGuiModule;
 
 public class CommandManager {
-    public List<Command> commandList;
-    public List<Command> sortedCommandList;
+    public List<Command> commandList = new ArrayList<>();
+    public List<Command> sortedCommandList = new ArrayList<>();
 
-    public CommandManager() {
-        this.commandList = new ArrayList<>();
-        this.sortedCommandList = new ArrayList<>();
-
-        // add commands
+    public void addCommands() {
         addCommand((Command)new TestCommand());
         addCommand((Command)new VClipCommand());
         addCommand((Command)new HelpCommand());
         addCommand((Command)new SettingsCommand());
         addCommand((Command)new BanCommand());
-        //addCommand((Command)new DiscordThing());
-        //addCommand((Command)new RatCommand());
-        addCommand((Command)new BoomToggleCommand());
         addCommand((Command)new Discord());
 
         for (Command cmd : commandList) {
@@ -52,11 +46,11 @@ public class CommandManager {
     }
 
     public void noSuchCommand(String name) {
-        JesusClient.sendPrefixMessage("Couldn't find the command you were using. Type `" + JesusClient.config.customPrefix + "help` for a list of commands.");
+        JesusClient.sendPrefixMessage("Couldn't find the command you were using. Type `" + ClickGuiModule.prefix.getObject() + "help` for a list of commands.");
     }
 
     public void executeCommand(String commandName, String[] args) {
-        Command command = JesusClient.commandManager.getCommandByName(commandName);
+        Command command = JesusClient.INSTANCE.commandManager.getCommandByName(commandName);
         if (command == null) {
             noSuchCommand(commandName);
             return;

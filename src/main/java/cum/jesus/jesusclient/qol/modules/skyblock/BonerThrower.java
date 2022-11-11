@@ -1,43 +1,48 @@
 package cum.jesus.jesusclient.qol.modules.skyblock;
 
 import cum.jesus.jesusclient.JesusClient;
+import cum.jesus.jesusclient.qol.modules.Category;
 import cum.jesus.jesusclient.qol.modules.Module;
+import cum.jesus.jesusclient.qol.settings.BooleanSetting;
+import cum.jesus.jesusclient.qol.settings.NumberSetting;
 import cum.jesus.jesusclient.utils.Utils;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 
-import java.util.Iterator;
-
 public class BonerThrower extends Module {
+    public BooleanSetting invMode = new BooleanSetting("Inv mode", false);
+
+    public NumberSetting<Integer> delay = new NumberSetting<>("Delay", 60, 0, 1000);
+
+    public NumberSetting<Integer> mainSlot = new NumberSetting<>("Main slot", 0, 0, 8);
+
     public BonerThrower() {
-        super("Boner Throw", JesusClient.config.boner);
+        super("Boner thrower", "Throws bones", Category.SKYBLOCK);
     }
 
-    @SubscribeEvent
-    public void onInputKey(InputEvent.KeyInputEvent event) {
-        if (JesusClient.config.boner && JesusClient.keyBindings[5].isPressed()) {
-            int oldSlot = JesusClient.mc.thePlayer.inventory.currentItem;
-            if (!JesusClient.config.bonerInvMode) {
-                (new Thread(() -> {
-                    for (int i = 0; i < 9; i++) {
-                        ItemStack a = JesusClient.mc.thePlayer.inventory.getStackInSlot(i);
-                        if (a != null && a.getDisplayName().toLowerCase().contains("bonemerang"))
-                            Utils.throwSlot(i);
-                        try {
-                            Thread.sleep(JesusClient.config.bonerDelay);
-                        } catch (InterruptedException e) {}
-                    }
-                })).start();
-            } else {
+    public void onEnable() {
+        int oldSlot = JesusClient.mc.thePlayer.inventory.currentItem;
+        if (!invMode.getObject()) {
+            (new Thread(() -> {
+                for (int i = 0; i < 9; i++) {
+                    ItemStack a = JesusClient.mc.thePlayer.inventory.getStackInSlot(i);
+                    if (a != null && a.getDisplayName().toLowerCase().contains("bonemerang"))
+                        Utils.throwSlot(i);
+                    try {
+                        Thread.sleep(delay.getObject());
+                    } catch (InterruptedException e) {}
+                }
+            })).start();
+        } else {
 
-            }
-            if (JesusClient.config.bonerMainSlot > 0 && JesusClient.config.bonerMainSlot <= 8) {
-                JesusClient.mc.thePlayer.inventory.currentItem = JesusClient.config.bonerMainSlot - 1;
-            } else {
-                JesusClient.mc.thePlayer.inventory.currentItem = oldSlot;
-            }
         }
+        if (mainSlot.getObject() > 0 && mainSlot.getObject() <= 8) {
+            JesusClient.mc.thePlayer.inventory.currentItem = mainSlot.getObject() - 1;
+        } else {
+            JesusClient.mc.thePlayer.inventory.currentItem = oldSlot;
+        }
+
+        setState(false);
     }
 }

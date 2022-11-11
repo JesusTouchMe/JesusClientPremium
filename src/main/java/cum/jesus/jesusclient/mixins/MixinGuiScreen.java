@@ -2,19 +2,20 @@ package cum.jesus.jesusclient.mixins;
 
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.command.commands.BanCommand;
+import cum.jesus.jesusclient.qol.modules.render.ClickGuiModule;
 import net.minecraft.client.gui.GuiScreen;
-import org.lwjgl.Sys;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import java.util.Locale;
 
 @Mixin(GuiScreen.class)
-public class MixinGuiScreen {
+public abstract class MixinGuiScreen {
     @Inject(method = "sendChatMessage(Ljava/lang/String;Z)V", at = @At("HEAD"), cancellable = true)
     public void sendChatMessage(String msg, boolean addToChat, CallbackInfo ci) {
-        if (msg.startsWith(JesusClient.config.customPrefix)) {
+        if (msg.startsWith(ClickGuiModule.prefix.getObject())) {
             String c = msg.substring(1);
             if (!c.isEmpty()) {
                 String cm = c.toLowerCase();
@@ -23,9 +24,9 @@ public class MixinGuiScreen {
 
                 JesusClient.Log.info("Ran command " + cm);
 
-                JesusClient.commandManager.executeCommand(cm.split(" ")[0], args);
+                JesusClient.INSTANCE.commandManager.executeCommand(cm.split(" ")[0], args);
+                JesusClient.mc.ingameGUI.getChatGUI().addToSentMessages(msg);
             }
-
             ci.cancel();
         }
 

@@ -1,18 +1,16 @@
 package cum.jesus.jesusclient.qol.modules.combat;
 
+import cum.jesus.jesusclient.qol.modules.Category;
 import cum.jesus.jesusclient.qol.modules.Module;
+import cum.jesus.jesusclient.qol.settings.NumberSetting;
 import net.minecraft.util.Vec3;
 import cum.jesus.jesusclient.JesusClient;
 
 public class Reach extends Module {
-    private static double reachAmount = JesusClient.config.reachAmount;
+    public static Reach INSTANCE = new Reach();
+    public static NumberSetting<Double> reachAmount = new NumberSetting<>("Reach amount", 3.0D, 2.0D, 4.5D);
 
     public Reach() {
-        super("Reach", JesusClient.config.reach);
-    }
-
-    public static double distanceTo(Vec3 instance, Vec3 vec) {
-        return (JesusClient.config.reach && instance.distanceTo(vec) + (0.0D) <= reachAmount ? 2.9000000953674316D : (instance
-                .distanceTo(vec) + (0.0D)));
+        super("Reach", "Hits entities from further away", Category.COMBAT);
     }
 }
