@@ -19,14 +19,11 @@ public class CommandManager {
         addCommand((Command)new SettingsCommand());
         addCommand((Command)new BanCommand());
         addCommand((Command)new Discord());
-
-        for (Command cmd : commandList) {
-            JesusClient.register(cmd);
-        }
     }
 
     public void addCommand(Command c) {
         this.commandList.add(c);
+        JesusClient.register(c);
     }
 
     public List<Command> getCommandList() {

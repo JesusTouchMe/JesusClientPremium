@@ -39,7 +39,7 @@ public class ConfigManager {
         {
             JsonObject metadata = new JsonObject();
 
-            metadata.addProperty("version", JesusClient.VERSION);
+            metadata.addProperty("clientVersion", JesusClient.VERSION);
 
             obj.add("metadata", metadata);
         }
@@ -109,7 +109,7 @@ public class ConfigManager {
                 }
 
             } else {
-                backupReasons.add("Save file has no metadata");
+                backupReasons.add("Config file has no metadata");
             }
             //</editor-fold>
 
@@ -133,7 +133,7 @@ public class ConfigManager {
                         JsonElement state = moduleObject.get("state");
 
                         if (state instanceof JsonPrimitive && ((JsonPrimitive) state).isBoolean()) {
-                            module.setState(state.getAsBoolean());
+                            module.setStateNoNotif(state.getAsBoolean());
                         } else {
                             backupReasons.add("'" + stringJsonElementEntry.getKey() + "/state' isn't valid");
                         }

@@ -39,9 +39,6 @@ public abstract class PlayerMixin extends EntityLivingBaseMixin {
     private boolean wasSprinting;
 
     @Shadow
-    public abstract void addStat(StatBase paramStatBase);
-
-    @Shadow
     public abstract void addExhaustion(float paramFloat);
 
     @Shadow

@@ -15,7 +15,6 @@ import cum.jesus.jesusclient.qol.modules.Module;
 import cum.jesus.jesusclient.qol.modules.ModuleManager;
 import cum.jesus.jesusclient.qol.modules.combat.*;
 import cum.jesus.jesusclient.qol.modules.funny.*;
-//import cum.jesus.jesusclient.qol.modules.macro.*;
 import cum.jesus.jesusclient.qol.modules.movement.*;
 import cum.jesus.jesusclient.qol.modules.other.*;
 import cum.jesus.jesusclient.qol.modules.player.*;
@@ -87,7 +86,7 @@ public class JesusClient {
     public static File cache = new File(dir, "CACHE");
     public boolean f = true;
     private boolean skull = false;
-    public static boolean init;
+    public static boolean init = false;
     public static JsonObject jesusClient;
     public static boolean isStarting;
 
@@ -119,7 +118,6 @@ public class JesusClient {
     @EventHandler
     public void onPre(FMLPreInitializationEvent event) {
         isStarting = true;
-        init = false;
         JesusClient.Log.info("Loading client");
 
         try {
@@ -224,14 +222,13 @@ public class JesusClient {
 
     @EventHandler
     public void onPost(FMLPostInitializationEvent event) {
-        init = true;
-        Log.info("[Jesus Client] Loaded Jesus Client!");
+        //Log.debug("post");
         Capes.load();
 
         if (!Objects.equals(Display.getTitle(), NAME + " v" + VERSION + " | " + "Author: JesusTouchMe" + " | " + "Minecraft 1.8.9")) {
             Display.setTitle(NAME + " v" + VERSION + " | " + "Author: JesusTouchMe" + " | " + "Minecraft 1.8.9");
         }
-
+        init = true;
         isStarting = false;
     }
 
@@ -325,19 +322,11 @@ public class JesusClient {
         }
     }
 
-    public static void sendMessage(String message) {
-        mc.thePlayer.addChatMessage((IChatComponent)new ChatComponentText(message));
+    public static void sendMessage(Object message) {
+        mc.thePlayer.addChatMessage((IChatComponent)new ChatComponentText(message.toString()));
     }
 
-    public static void sendPrefixMessage(String message) {
-        mc.thePlayer.addChatMessage((IChatComponent)new ChatComponentText("\u00A78[\u00A74Jesus Client\u00A78] \u00A77" + message));
-    }
-
-    public static void sendPrefixMessage(int message) {
-        mc.thePlayer.addChatMessage((IChatComponent)new ChatComponentText("\u00A78[\u00A74Jesus Client\u00A78] \u00A77" + message));
-    }
-
-    public static void sendPrefixMessage(boolean message) {
+    public static void sendPrefixMessage(Object message) {
         mc.thePlayer.addChatMessage((IChatComponent)new ChatComponentText("\u00A78[\u00A74Jesus Client\u00A78] \u00A77" + message));
     }
 

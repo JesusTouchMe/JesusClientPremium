@@ -20,13 +20,13 @@ public class BaseRenderThing implements IRenderer {
 
     @Override
     public void drawRect(double x, double y, double w, double h, Color c) {
-        RenderUtils.drawRect(GL11.GL_QUADS, x / 2.0, y / 2.0, x / 2.0 + w / 2.0, y / 2.0 + h / 2.0, RenderUtils.toRGBA(c));
+        RenderUtils.drawRect(GL11.GL_QUADS, x / 2.0, y / 2.0, x / 2.0 + w / 2.0, y / 2.0 + h / 2.0, c.getRGB());
     }
 
     @Override
     public void drawOutline(double x, double y, double w, double h, float lineWidth, Color c) {
         GL11.glLineWidth(lineWidth);
-        RenderUtils.drawRect(GL11.GL_LINE_LOOP, x / 2.0, y / 2.0, x / 2.0 + w / 2.0, y / 2.0 + h / 2.0, RenderUtils.toRGBA(c));
+        RenderUtils.drawRect(GL11.GL_LINE_LOOP, x / 2.0, y / 2.0, x / 2.0 + w / 2.0, y / 2.0 + h / 2.0, c.getRGB());
     }
 
     @Override
@@ -36,7 +36,7 @@ public class BaseRenderThing implements IRenderer {
 
     @Override
     public void drawString(int x, int y, String text, Color color) {
-        renderer.drawString(text, x / 2f, y / 2f, RenderUtils.toRGBA(color), false);
+        renderer.drawString(text, x / 2f, y / 2f, color.getRGB(), false);
     }
 
     @Override

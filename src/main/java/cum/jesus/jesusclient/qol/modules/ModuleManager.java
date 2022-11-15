@@ -27,33 +27,29 @@ public class ModuleManager {
     @NotNull
     private List<Module> modules = new ArrayList<>();
 
-    public ModuleManager() {
-        JesusClient.register(this);
-    }
-
-
     public void addModules() {
-        addModule(HiddenShit.INSTANCE);
         addModule(Velo.INSTANCE);
-        addModule(Reach.INSTANCE);
+        addModule(new InvMove());
+        addModule(new AutoRogue());
+        addModule(NickHider.INSTANCE);
         addModule(ToggleSprint.INSTANCE);
-        addModule(richPresence);
-        modules.add(new Retardation());
-        modules.add(new AutoRogue());
-        modules.add(KillAura.INSTANCE);
-        modules.add(new Cum());
-        modules.add(Flight.INSTANCE);
-        modules.add(new NoFall());
-        modules.add(new Parkour());
-        modules.add(new Jesus());
-        modules.add(new BHop());
-        modules.add(new InvMove());
-        modules.add(new Timer());
-        modules.add(new AntiThrow());
-        modules.add(new BonerThrower());
-        modules.add(NickHider.INSTANCE);
+        addModule(new Retardation());
+        addModule(HiddenShit.INSTANCE);
 
-        modules.add(new ClickGuiModule());
+        addModule(Reach.INSTANCE);
+        addModule(richPresence);
+        addModule(KillAura.INSTANCE);
+        addModule(new Cum());
+        addModule(Flight.INSTANCE);
+        addModule(new NoFall());
+        addModule(new Parkour());
+        addModule(new Jesus());
+        addModule(new BHop());
+        addModule(new Timer());
+        addModule(new AntiThrow());
+        addModule(new BonerThrower());
+
+        addModule(new ClickGuiModule());
 
         if (richPresence.getState())
             richPresence.onEnable();

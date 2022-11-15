@@ -19,6 +19,11 @@ public class ClickGuiModule extends Module {
     @Override
     protected void onEnable() {
         mc.displayGuiScreen(ClickGui.INSTANCE);
-        setState(false);
+        setStateNoNotif(false);
+    }
+
+    @Override
+    public boolean shouldNotify() {
+        return false;
     }
 }

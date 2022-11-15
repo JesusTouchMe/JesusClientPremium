@@ -1,16 +1,9 @@
 package cum.jesus.jesusclient.qol.modules;
 
 import cum.jesus.jesusclient.JesusClient;
-import cum.jesus.jesusclient.config.ConfigSorting;
 import cum.jesus.jesusclient.qol.modules.render.ClickGuiModule;
-import cum.jesus.jesusclient.utils.MilliTimer;
 import cum.jesus.jesusclient.utils.Utils;
-import kotlin.jvm.internal.Intrinsics;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.util.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Keyboard;
 
 public abstract class Module {
@@ -22,6 +15,7 @@ public abstract class Module {
     private boolean hidden;
     private int keybind;
     private boolean state;
+    private boolean shouldNotify = true;
 
     protected Module(String name, String description, Category moduleCategory) {
         this(name, description, moduleCategory, true, false, Keyboard.KEY_NONE);
@@ -68,23 +62,38 @@ public abstract class Module {
         return state;
     }
 
+    public boolean shouldNotify() {
+        return shouldNotify;
+    }
+
     public void setState(boolean state) {
         if (state) {
             this.state = true;
 
             onEnable();
 
-            if (!ClickGuiModule.hideNotifs.getObject()) {
+            if (!ClickGuiModule.hideNotifs.getObject() && shouldNotify()) {
                 JesusClient.sendPrefixMessage(Utils.getColouredBoolean(state) + " " + getName());
             }
 
         } else {
             this.state = false;
+
             onDisable();
 
-            if (!ClickGuiModule.hideNotifs.getObject()){
+            if (!ClickGuiModule.hideNotifs.getObject() && shouldNotify){
                 JesusClient.sendPrefixMessage(Utils.getColouredBoolean(state) + " " + getName());
             }
+        }
+    }
+
+    public void setStateNoNotif(boolean state) {
+        if (state) {
+            this.state = true;
+            onEnable();
+        } else {
+            this.state = false;
+            onDisable();
         }
     }
 

@@ -46,9 +46,9 @@ public class ClickGui extends GuiScreen {
 
         window = new Window(JesusClient.NAME, 50, 50, 900, 400);
 
-        Pane conentPane = new ScrollPane(renderer, new GridLayout(1));
+        Pane conentPane = new me.superblaubeere27.clickgui.components.ScrollPane(renderer, new me.superblaubeere27.clickgui.layout.GridLayout(1));
 
-        Pane buttonPane = new Pane(renderer, new FlowLayout());
+        Pane buttonPane = new Pane(renderer, new me.superblaubeere27.clickgui.layout.FlowLayout());
 
         HashMap<Category, List<Module>> moduleCategoryMap = new HashMap<>();
         categoryPaneMap = new HashMap<>();
@@ -58,7 +58,7 @@ public class ClickGui extends GuiScreen {
                 moduleCategoryMap.put(module.getCategory(), new ArrayList<>());
             }
 
-            moduleCategoryMap.get(module.getCategory()).add(module);
+            if (!module.isHidden()) moduleCategoryMap.get(module.getCategory()).add(module);
         }
 
         HashMap<Category, Pane> paneMap = new HashMap<>();
@@ -66,12 +66,12 @@ public class ClickGui extends GuiScreen {
         List<Spoiler> spoilers = new ArrayList<>();
         List<Pane> paneList = new ArrayList<>();
 
-        for (Map.Entry<Category, List<Module>> CategoryListEntry : moduleCategoryMap.entrySet()) {
+        for (Map.Entry<Category, List<Module>> moduleCategoryListEntry : moduleCategoryMap.entrySet()) {
             Pane spoilerPane = new Pane(renderer, new GridLayout(1));
 
 
-            for (Module module : CategoryListEntry.getValue()) {
-                Pane settingPane = new Pane(renderer, new GridLayout(4));
+            for (Module module : moduleCategoryListEntry.getValue()) {
+                Pane settingPane = new Pane(renderer, new me.superblaubeere27.clickgui.layout.GridLayout(4));
 
                 {
                     settingPane.addComponent(new Label(renderer, "State"));
@@ -167,10 +167,10 @@ public class ClickGui extends GuiScreen {
 
                 spoilerPane.addComponent(spoiler);
 
-                paneMap.put(CategoryListEntry.getKey(), spoilerPane);
+                paneMap.put(moduleCategoryListEntry.getKey(), spoilerPane);
             }
 
-            categoryPaneMap.put(CategoryListEntry.getKey(), spoilerPane);
+            categoryPaneMap.put(moduleCategoryListEntry.getKey(), spoilerPane);
 
 
         }
@@ -179,10 +179,10 @@ public class ClickGui extends GuiScreen {
         spoilerPane = new Pane(renderer, new GridLayout(1));
 
 
-        for (Category Category : categoryPaneMap.keySet()) {
+        for (Category moduleCategory : categoryPaneMap.keySet()) {
             Button button;
-            buttonPane.addComponent(button = new Button(renderer, Category.toString()));
-            button.setOnClickListener(() -> setCurrentCategory(Category));
+            buttonPane.addComponent(button = new me.superblaubeere27.clickgui.components.Button(renderer, moduleCategory.toString()));
+            button.setOnClickListener(() -> setCurrentCategory(moduleCategory));
         }
 
         conentPane.addComponent(buttonPane);
@@ -253,12 +253,6 @@ public class ClickGui extends GuiScreen {
         window.mouseReleased(state, mouseX * 2, mouseY * 2);
 
         super.mouseReleased(mouseX, mouseY, state);
-
-        try {
-            JesusClient.INSTANCE.configManager.save();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
     @Override
@@ -281,6 +275,11 @@ public class ClickGui extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         window.keyPressed(keyCode, typedChar);
         super.keyTyped(typedChar, keyCode);
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
     }
 }
 

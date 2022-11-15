@@ -6,8 +6,6 @@ import com.google.gson.JsonParser;
 import cum.jesus.jesusclient.JesusClient;
 import cum.jesus.jesusclient.events.TickEndEvent;
 import jline.internal.Log;
-import kotlin.Metadata;
-import kotlin.jvm.internal.Intrinsics;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -262,7 +260,6 @@ public class Utils {
     }
 
     public static final void playSound(@NotNull File file, int volume) {
-        Intrinsics.checkNotNullParameter(file, "file");
         if (file.exists())
             try {
                 AudioInputStream audio = AudioSystem.getAudioInputStream(file);
@@ -454,7 +451,6 @@ public class Utils {
         return false;
     }
 
-    @Metadata(mv = {1, 1, 16}, bv = {1, 0, 3}, k = 1, d1 = {"\000\026\n\002\030\002\n\002\020\000\n\000\n\002\020\013\n\000\n\002\030\002\n\000\bf\030\0002\0020\001J\022\020\002\032\0020\0032\b\020\004\032\004\030\0010\005H&\006\006"}, d2 = {"Lcum/jesus/jesusclient/utils/Utils$Collidable;", "", "collideBlock", "", "block", "Lnet/minecraft/block/Block;", "JesusClient"})
     public static interface Collidable {
         boolean collideBlock(@Nullable Block param1Block);
     }
